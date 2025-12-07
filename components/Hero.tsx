@@ -27,13 +27,14 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full relative z-10">
         
         {/* KOLOM KIRI: TEKS */}
-        <div className="text-center md:text-left space-y-4 md:space-y-8 animate-fade-in-up mt-20 md:mt-0">
+        {/* PERBAIKAN: mt-20 dihapus menjadi mt-0 agar teks tidak terlalu turun di HP */}
+        <div className="text-center md:text-left space-y-4 md:space-y-8 animate-fade-in-up mt-0 md:mt-0">
            {/* Badge Kecil */}
            <div className="inline-block px-3 py-1 md:px-4 md:py-1.5 bg-pink-600/20 backdrop-blur-md border border-pink-500/30 text-pink-300 font-medium text-xs md:text-sm rounded-full">
               ✨ Undangan Digital Premium
            </div>
            
-           {/* HEADLINE: Responsif (Kecil di HP, Besar di Desktop) */}
+           {/* HEADLINE */}
            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight font-serif drop-shadow-lg">
               Abadikan Momen <br/>
               <span className="text-transparent bg-clip-text bg-linear-to-r from-pink-400 to-purple-400">
@@ -41,12 +42,12 @@ export default function Hero() {
               </span>
            </h1>
            
-           {/* Paragraf: Responsif */}
+           {/* Paragraf */}
            <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed max-w-lg mx-auto md:mx-0">
               Buat undangan pernikahan impianmu dengan puluhan tema eksklusif. Fitur lengkap, mudah diedit, dan siap kirim ke semua tamu.
            </p>
 
-           {/* Tombol: Ukuran responsif */}
+           {/* Tombol */}
            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 justify-center md:justify-start px-4 md:px-0">
               <Link href="/login" className="w-full sm:w-auto">
                   <button className="w-full px-6 py-3 md:px-8 md:py-4 bg-pink-600 text-white font-bold rounded-full shadow-lg hover:bg-pink-700 transition text-sm md:text-base">
@@ -120,10 +121,15 @@ export default function Hero() {
 
       </div>
 
-      {/* --- DIVIDER: WAVE SVG (WARNA FIXED) --- */}
+      {/* --- DIVIDER: WAVE SVG --- */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180 z-20">
-          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(130%+1.3px)] h-[80] fill-[#fafaf9] 
-          ">
+          <svg 
+            data-name="Layer 1" 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 1200 120" 
+            preserveAspectRatio="none" 
+            className="relative block w-[calc(130%+1.3px)] h-[80] fill-[#fafaf9]"
+          >
               <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
           </svg>
       </div>
