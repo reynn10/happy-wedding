@@ -33,7 +33,7 @@ export default function ThemesPage() {
       <Navbar />
       
       {/* Header */}
-      <section className="pt-20 pb-12 px-6 text-center" data-aos="fade-down">
+      <section className="pt-30 pb-12 px-6 text-center" data-aos="fade-down">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 font-serif mb-4">Koleksi Tema Eksklusif</h1>
           <p className="text-gray-500 max-w-xl mx-auto">Pilih desain undangan yang paling menggambarkan kisah cinta Anda.</p>
       </section>

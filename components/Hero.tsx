@@ -5,8 +5,8 @@ export default function Hero() {
   return (
     <section 
       id="beranda"
-      className="relative min-h-screen md:min-h-[110vh] flex items-center pt-0 overflow-hidden" 
-      style={{ 
+      className="relative min-h-dvh md:min-h-[110vh] flex items-center pt-0 overflow-hidden" 
+      style={{  
         backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.4) 100%), url("https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -14,39 +14,43 @@ export default function Hero() {
       }}
     >
       
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full z-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full z-10">
         
-        {/* --- KOLOM KIRI: TEKS --- */}
-        <div className="text-center md:text-left space-y-6 md:space-y-8 animate-fade-in-up mt-16 md:mt-0">
-           <div className="inline-block px-4 py-1.5 bg-pink-600/20 backdrop-blur-md border border-pink-500/30 text-pink-300 font-medium text-sm rounded-full">
+        <div className="text-center md:text-left space-y-4 md:space-y-8 animate-fade-in-up mt-20 md:mt-0">
+           {/* Badge Kecil */}
+           <div className="inline-block px-3 py-1 md:px-4 md:py-1.5 bg-pink-600/20 backdrop-blur-md border border-pink-500/30 text-pink-300 font-medium text-xs md:text-sm rounded-full">
               ✨ Undangan Digital Premium
            </div>
            
-           <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight font-serif drop-shadow-lg">
+           {/* HEADLINE: Kecilkan di Mobile (text-4xl), Besar di Desktop (md:text-7xl) */}
+           <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight font-serif drop-shadow-lg">
               Abadikan Momen <br/>
               <span className="text-transparent bg-clip-text bg-linear-to-r from-pink-400 to-purple-400">
                 Penuh Cinta
               </span>
            </h1>
            
-           <p className="text-lg text-gray-300 leading-relaxed max-w-lg mx-auto md:mx-0">
+           {/* Paragraf: text-sm atau text-base di HP */}
+           <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed max-w-lg mx-auto md:mx-0">
               Buat undangan pernikahan impianmu dengan puluhan tema eksklusif. Fitur lengkap, mudah diedit, dan siap kirim ke semua tamu.
            </p>
 
-           <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
-              <Link href="/login">
-                  <button className="px-8 py-4 bg-pink-600 text-white font-bold rounded-full shadow-[0_0_20px_rgba(219,39,119,0.5)] hover:bg-pink-700 hover:scale-105 transition-all duration-300 w-full sm:w-auto">
+           {/* Tombol: Stack vertikal di HP, Row di Desktop */}
+           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 justify-center md:justify-start px-4 md:px-0">
+              <Link href="/login" className="w-full sm:w-auto">
+                  <button className="w-full px-6 py-3 md:px-8 md:py-4 bg-pink-600 text-white font-bold rounded-full shadow-lg hover:bg-pink-700 transition text-sm md:text-base">
                     Buat Sekarang
                   </button>
               </Link>
-              <Link href="/features">
-                  <button className="px-8 py-4 bg-transparent border border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all duration-300 backdrop-blur-sm w-full sm:w-auto">
+              <Link href="/features" className="w-full sm:w-auto">
+                  <button className="w-full px-6 py-3 md:px-8 md:py-4 bg-white/10 border border-white/30 text-white font-bold rounded-full hover:bg-white/20 transition backdrop-blur-sm text-sm md:text-base">
                     Pelajari Fitur
                   </button>
               </Link>
            </div>
            
-           <div className="flex items-center justify-center md:justify-start gap-3 text-sm text-gray-400 pt-4">
+           {/* Rating */}
+           <div className="flex items-center justify-center md:justify-start gap-2 md:gap-3 text-xs md:text-sm text-gray-400 pt-2">
               <span className="flex text-yellow-400">★★★★★</span>
               <span>4.9/5 dari 2.000+ Pengantin</span>
            </div>
