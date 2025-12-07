@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section 
       id="beranda"
-      className="relative min-h-`dvh md:min-h-[110vh] flex items-center pt-0 overflow-hidden" 
+      className="relative min-h-dvh md:min-h-[110vh] flex items-center pt-0 overflow-hidden" 
     >
       
       {/* --- 1. BACKGROUND IMAGE --- */}
