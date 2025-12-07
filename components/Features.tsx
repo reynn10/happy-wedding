@@ -7,7 +7,6 @@ const features = [
     label: "BROADCAST",
     title: "Kirim WA Otomatis",
     description: "Kirim ke 500+ tamu sekaligus dengan nama personal. Anti ribet.",
-    // KONSISTENSI: Menggunakan Pink Palette untuk semua kartu
     color: "text-pink-600",
     glassBg: "bg-pink-100/40", 
     glassBorder: "border-pink-200/60",
@@ -44,7 +43,8 @@ const features = [
     hoverBorder: "group-hover:border-pink-400/50",
     hoverBg: "group-hover:bg-pink-200/50",
     iconColor: "text-pink-500",
-    icon: (<svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+    icon: (
+    <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
     )
   },
   {
@@ -68,8 +68,6 @@ export default function Features() {
   return (
     // FIX: bg-transparent agar background utama dari page.tsx terlihat
     <section id="fitur" className="py-24 bg-transparent relative overflow-hidden">
-      
-      {/* HAPUS: Background Blobs Lokal - Biarkan ikut page.tsx */}
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         
