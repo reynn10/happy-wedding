@@ -11,7 +11,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     // 1. BACKGROUND UTAMA: Stone-50 (Hex #fafaf9)
-    <main className="min-h-screen bg-[#fafaf9] relative overflow-hidden font-sans text-gray-800">
+    <main className="min-h-screen bg-[#fafaf9] relative overflow-x-hidden font-sans text-gray-800">
       <Navbar />
       
       <Hero />
