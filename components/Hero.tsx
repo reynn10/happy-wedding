@@ -75,7 +75,7 @@ export default function Hero() {
 
             <div className="relative w-72 h-[520px] bg-black rounded-[3rem] border-8 border-gray-800 shadow-2xl z-10 overflow-hidden transform transition hover:scale-105 duration-500">
                 <Image 
-                    src="https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=1976" 
+                    src="https://images.unsplash.com/photo-1504903669937-2f825bf5956f" 
                     alt="Main App" fill className="object-cover opacity-90"
                 />
                 <div className="absolute inset-0 flex flex-col justify-end pb-10 px-6 bg-linear-to-t from-black/80 via-transparent to-transparent">

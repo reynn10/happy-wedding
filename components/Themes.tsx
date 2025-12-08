@@ -5,9 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const themeList = [
-  { id: 1, name: "Rustic Nature", category: "Outdoor", image: "1605106702734-205df224ecce", description: "Nuansa alam yang hangat dengan ornamen kayu." },
-  { id: 2, name: "Classic Elegant", category: "Luxury", image: "1511285560982-1351cdeb9821", description: "Desain putih bersih nan mewah untuk pernikahan sakral." },
-  { id: 3, name: "Dark Floral", category: "Modern", image: "1507646227500-4d38930012be", description: "Sentuhan bunga gelap yang romantis dan misterius." },
+  { id: 1, name: "Rustic Nature", category: "Outdoor", image: "1764269713275-9fea9f0d91c8", description: "Nuansa alam yang hangat dengan ornamen kayu." },
+  { id: 2, name: "Classic Elegant", category: "Luxury", image: "1764641642780-21475fb85af1", description: "Desain putih bersih nan mewah untuk pernikahan sakral." },
+  { id: 3, name: "Dark Floral", category: "Modern", image: "1633051567046-844064059c53", description: "Sentuhan bunga gelap yang romantis dan misterius." },
   { id: 4, name: "Javanese Heritage", category: "Traditional", image: "1519741497674-611481863552", description: "Keagungan budaya Jawa dengan sentuhan modern." }
 ];
 
