@@ -4,6 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import CoupleEditor from './components/CoupleEditor';
+import DateEditor from './components/DateEditor';
+import GalleryEditor from './components/GalleryEditor';
+import StoryEditor from './components/StoryEditor';
+import MusicEditor from './components/MusicEditor';
+import ThemeEditor from './components/ThemeEditor';
 
 export default function InvitationPage() {
   const router = useRouter();
