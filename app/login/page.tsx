@@ -48,12 +48,12 @@ export default function LoginPage() {
 
   const activeData = testimonials[currentTesti];
 
-  const handleLogin = async (e: React.FormEvent) => {
+   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -61,7 +61,10 @@ export default function LoginPage() {
       if (error) {
         alert("Login gagal: " + error.message);
       } else {
-        // alert("Login berhasil! Mengarahkan ke dashboard..."); // Opsional
+        // WAJIB: Refresh agar Middleware sadar ada cookie baru
+        router.refresh(); 
+        
+        // Baru pindah halaman
         router.push('/dashboard');
       }
     } catch (error) {
@@ -72,18 +75,12 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
-        },
       },
     });
-    
-    if (error) alert(error.message);
   };
   
   return (

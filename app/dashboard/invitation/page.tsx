@@ -8,6 +8,9 @@ import { supabase } from '@/lib/supabaseClient';
 export default function InvitationPage() {
   const router = useRouter();
 
+  // GAMBAR DEFAULT
+  const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1170&auto=format&fit=crop";
+
   // --- STATE DATA ---
   const [data, setData] = useState({
     id: 0,
@@ -17,7 +20,7 @@ export default function InvitationPage() {
     venue: "Grand Hotel Ballroom",
     mapUrl: "", 
     themeColor: "Pink",
-    coverPhoto: "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=600",
+    coverPhoto: DEFAULT_IMAGE,
     story: "Kami bertemu pertama kali di...",
     music: "Beautiful in White - Shane Filan"
   });
@@ -50,7 +53,7 @@ export default function InvitationPage() {
             venue: invData.venue_name || "Grand Hotel Ballroom",
             mapUrl: invData.map_url || "",
             themeColor: invData.theme_color || "Pink",
-            coverPhoto: invData.cover_photo || "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=600",
+            coverPhoto: invData.cover_photo || DEFAULT_IMAGE,
             story: invData.story || "",
             music: invData.music || "Beautiful in White"
         });
@@ -60,7 +63,18 @@ export default function InvitationPage() {
     fetchData();
   }, []);
 
-  // --- 2. UPLOAD IMAGE HANDLER (DIPERBAIKI) ---
+  // --- 2. GENERATE LIVE PREVIEW URL ---
+  const getPreviewUrl = () => {
+    const params = new URLSearchParams();
+    params.set('groom', data.groomName);
+    params.set('bride', data.brideName);
+    params.set('date', data.date);
+    params.set('venue', data.venue);
+    params.set('cover', data.coverPhoto);
+    return `/invitation/demo?${params.toString()}`;
+  };
+
+  // --- 3. UPLOAD IMAGE ---
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     
@@ -71,29 +85,26 @@ export default function InvitationPage() {
 
     setIsUploading(true);
 
-    // FIX: Ganti 'invitations' menjadi 'invitation' (sesuai nama bucket Anda)
     const { error: uploadError } = await supabase.storage
-      .from('invitation') 
-      .upload(filePath, file);
+      .from('invitation')
+      .upload(filePath, file, { cacheControl: '3600', upsert: false });
 
     if (uploadError) {
-      console.error("Upload Error:", uploadError);
       alert("Gagal upload: " + uploadError.message);
       setIsUploading(false);
       return;
     }
 
-    // FIX: Ganti 'invitations' menjadi 'invitation'
     const { data: { publicUrl } } = supabase.storage
       .from('invitation')
       .getPublicUrl(filePath);
 
-    // 3. Update State dengan URL baru
-    setData(prev => ({ ...prev, coverPhoto: publicUrl }));
+    const freshUrl = `${publicUrl}?t=${Date.now()}`;
+    setData(prev => ({ ...prev, coverPhoto: freshUrl }));
     setIsUploading(false);
   };
 
-  // --- 3. SIMPAN DATA ---
+  // --- 4. SAVE DATA ---
   const handleSave = async () => {
     if (!userId) return;
     setIsSaving(true);
@@ -123,14 +134,13 @@ export default function InvitationPage() {
     alert("Berhasil disimpan!");
   };
 
-  // Handlers
+  // Handlers UI
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setData(prev => ({ ...prev, [name]: value }));
   };
-
   const handleThemeChange = (color: string) => { setData(prev => ({ ...prev, themeColor: color })); };
-  const handlePreview = () => window.open('/invitation/demo', '_blank');
+  const handlePreview = () => window.open(getPreviewUrl(), '_blank'); 
   const handleShare = () => { navigator.clipboard.writeText("https://happywedding.com/invitation/demo"); alert("Link tersalin!"); };
 
   const menuItems = [
@@ -149,14 +159,10 @@ export default function InvitationPage() {
       <div className="bg-white p-8 rounded-[2.5rem] shadow-lg border border-gray-100 animate-fade-in-up h-full flex flex-col">
         <div className="flex items-center justify-between mb-8">
              <h3 className="text-2xl font-serif font-bold text-gray-900">Edit {menuItems.find(m => m.id === activeMenu)?.title}</h3>
-             <button onClick={() => setActiveMenu(null)} suppressHydrationWarning={true} className="text-sm text-gray-500 hover:text-gray-900 font-bold flex items-center gap-2 px-4 py-2 rounded-full bg-gray-50 hover:bg-gray-100 transition">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
-                Tutup
-             </button>
+             <button onClick={() => setActiveMenu(null)} suppressHydrationWarning={true} className="text-sm text-gray-500 hover:text-gray-900 font-bold flex items-center gap-2 px-4 py-2 rounded-full bg-gray-50 hover:bg-gray-100 transition"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>Tutup</button>
         </div>
 
         <div className="space-y-6 overflow-y-auto custom-scrollbar pr-2 pb-4">
-            
             {activeMenu === 'mempelai' && (
                 <>
                     <div className="space-y-2">
@@ -182,7 +188,7 @@ export default function InvitationPage() {
                     </div>
                     <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Link Google Maps</label>
-                        <input type="text" name="mapUrl" placeholder="https://maps.app.goo.gl/..." value={data.mapUrl} onChange={handleInputChange} suppressHydrationWarning={true} className="w-full p-4 bg-stone-50 rounded-2xl border border-stone-100 outline-none focus:ring-2 focus:ring-blue-200 transition font-medium text-sm text-blue-600 underline" />
+                        <input type="text" name="mapUrl" placeholder="https://maps.app.goo.gl/..." value={data.mapUrl} onChange={handleInputChange} suppressHydrationWarning={true} className="w-full p-4 bg-stone-50 rounded-2xl border border-stone-100 outline-none focus:ring-2 focus:ring-blue-200 transition text-gray-900 font-medium text-sm text-blue-600 underline" />
                         <p className="text-[10px] text-gray-400">Copy link dari Google Maps (Share - Copy Link).</p>
                     </div>
                 </>
@@ -235,27 +241,30 @@ export default function InvitationPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* KOLOM KIRI: PREVIEW HP */}
+          {/* --- KOLOM KIRI: PREVIEW HP (LIVE IFRAME) --- */}
           <div className="lg:col-span-1 sticky top-8">
               <div className="bg-white rounded-[3rem] p-4 shadow-sm border border-gray-100 flex justify-center items-center relative overflow-hidden group">
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-                  <div className="relative w-[280px] h-[580px] bg-gray-900 rounded-[2.5rem] border-8 border-gray-800 shadow-2xl overflow-hidden transform group-hover:scale-[1.02] transition duration-500">
-                      <div className="relative w-full h-full">
-                          <Image src={data.coverPhoto} alt="Mobile Preview" fill className="object-cover opacity-90" />
-                          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-bold border border-white/20 z-20">Live Preview</div>
-                          <div className="absolute bottom-0 w-full p-6 bg-linear-to-t from-black/90 via-black/50 to-transparent pt-32 text-center">
-                              <p className="text-pink-300 text-[10px] uppercase tracking-[0.2em] mb-2 animate-pulse">The Wedding Of</p>
-                              <h3 className="text-white font-serif text-2xl leading-tight mb-2 drop-shadow-lg">{data.groomName} <br/> <span className="text-lg italic">&</span> <br/> {data.brideName}</h3>
-                              <div className="w-10 h-px bg-white/50 mx-auto my-3"></div>
-                              <p className="text-gray-200 text-xs">{data.date}</p><p className="text-gray-400 text-[10px] mt-1">{data.venue}</p>
-                          </div>
-                      </div>
+                  
+                  {/* Mockup HP */}
+                  <div className="relative w-[280px] h-[580px] bg-gray-900 rounded-[2.5rem] border-[8px] border-gray-800 shadow-2xl overflow-hidden">
+                      
+                      {/* FIX: Scrolling="no" untuk menyembunyikan scrollbar iframe */}
+                      <iframe 
+                        src={getPreviewUrl()}
+                        className="w-full h-full bg-white [&::-webkit-scrollbar]:hidden"
+                        style={{ border: 'none' }}
+                        title="Live Preview"
+                        scrolling="no" 
+                      />
+                      
                   </div>
               </div>
           </div>
-          {/* KOLOM KANAN: MENU EDIT */}
+
+          {/* --- KOLOM KANAN: MENU EDIT --- */}
           <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white p-6 rounded-4xl border border-gray-100 shadow-sm flex items-center justify-between">
+              <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-between">
                   <div className="flex items-center gap-4"><div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/></svg></div><div><h3 className="font-bold text-gray-900">Status Undangan: Aktif</h3><p className="text-xs text-gray-500">Masa aktif selamanya (Lifetime)</p></div></div>
               </div>
               {activeMenu ? renderEditor() : (<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-fade-in-up">{menuItems.map((item) => (<button key={item.id} onClick={() => setActiveMenu(item.id)} suppressHydrationWarning={true} className={`group relative bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl ${item.borderColor} transition-all duration-500 overflow-hidden h-40 flex flex-col justify-end text-left`}><div className={`absolute -bottom-4 -right-4 opacity-10 rotate-12 group-hover:rotate-0 group-hover:opacity-40 group-hover:scale-110 transition-all duration-500 ease-out ${item.watermarkColor}`}>{item.icon}</div><div className="relative z-10"><p className={`font-bold text-[10px] uppercase tracking-[0.2em] mb-1 ${item.subTextColor}`}>{item.desc}</p><h4 className={`font-serif font-bold text-3xl text-gray-900 ${item.textColor} transition-colors tracking-tight`}>{item.title}</h4></div></button>))}</div>)}
