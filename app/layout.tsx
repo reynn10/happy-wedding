@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next"; // Import Viewport
+import type { Metadata, Viewport } from "next"; // 1. Import Viewport
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import UseScrollEffects from "../components/UseScrollEffects";
@@ -6,12 +6,14 @@ import UseScrollEffects from "../components/UseScrollEffects";
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: '--font-playfair' });
 
-// 1. TAMBAHKAN INI: Pengaturan Viewport yang Benar
+// 2. KONFIGURASI VIEWPORT (SANGAT PENTING UNTUK HP)
+// Ini yang mencegah website terlihat "terlalu nge-zoom" atau teks raksasa di HP.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1, // Mencegah zoom otomatis yang berlebihan
-  userScalable: false, // Opsional: Mencegah user zoom manual (agar terasa seperti aplikasi native)
+  maximumScale: 1, // Mencegah browser zoom otomatis
+  userScalable: false, // Opsional: Menonaktifkan cubit-zoom (biar terasa seperti aplikasi native)
+  themeColor: "#fafaf9", // Menyamakan warna bar browser HP dengan background (Stone-50)
 };
 
 export const metadata: Metadata = {
@@ -26,9 +28,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className="scroll-smooth">
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased overflow-x-hidden`}>
-        {/* Tambahkan overflow-x-hidden di body untuk mencegah scroll samping tidak sengaja */}
+      {/* 3. CLASS TAMBAHAN: 'overflow-x-hidden'
+        Ini mencegah website bisa digeser ke kanan-kiri (scroll samping) yang tidak sengaja 
+        membuat tampilan jadi kecil/rusak di HP.
+      */}
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased overflow-x-hidden bg-[#fafaf9]`}>
         
+        {/* Efek Scroll Mewah (Lenis + AOS) */}
         <UseScrollEffects />
         
         {children}
