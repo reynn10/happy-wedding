@@ -239,14 +239,14 @@ export default function InvitationPage() {
           <div className="lg:col-span-1 sticky top-8">
               <div className="bg-white rounded-[3rem] p-4 shadow-sm border border-gray-100 flex justify-center items-center relative overflow-hidden group">
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-                  <div className="relative w-[280px] h-[580px] bg-gray-900 rounded-[2.5rem] border-[8px] border-gray-800 shadow-2xl overflow-hidden transform group-hover:scale-[1.02] transition duration-500">
+                  <div className="relative w-[280px] h-[580px] bg-gray-900 rounded-[2.5rem] border-8 border-gray-800 shadow-2xl overflow-hidden transform group-hover:scale-[1.02] transition duration-500">
                       <div className="relative w-full h-full">
                           <Image src={data.coverPhoto} alt="Mobile Preview" fill className="object-cover opacity-90" />
                           <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-bold border border-white/20 z-20">Live Preview</div>
                           <div className="absolute bottom-0 w-full p-6 bg-linear-to-t from-black/90 via-black/50 to-transparent pt-32 text-center">
                               <p className="text-pink-300 text-[10px] uppercase tracking-[0.2em] mb-2 animate-pulse">The Wedding Of</p>
                               <h3 className="text-white font-serif text-2xl leading-tight mb-2 drop-shadow-lg">{data.groomName} <br/> <span className="text-lg italic">&</span> <br/> {data.brideName}</h3>
-                              <div className="w-10 h-[1px] bg-white/50 mx-auto my-3"></div>
+                              <div className="w-10 h-px bg-white/50 mx-auto my-3"></div>
                               <p className="text-gray-200 text-xs">{data.date}</p><p className="text-gray-400 text-[10px] mt-1">{data.venue}</p>
                           </div>
                       </div>
@@ -255,7 +255,7 @@ export default function InvitationPage() {
           </div>
           {/* KOLOM KANAN: MENU EDIT */}
           <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-between">
+              <div className="bg-white p-6 rounded-4xl border border-gray-100 shadow-sm flex items-center justify-between">
                   <div className="flex items-center gap-4"><div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/></svg></div><div><h3 className="font-bold text-gray-900">Status Undangan: Aktif</h3><p className="text-xs text-gray-500">Masa aktif selamanya (Lifetime)</p></div></div>
               </div>
               {activeMenu ? renderEditor() : (<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-fade-in-up">{menuItems.map((item) => (<button key={item.id} onClick={() => setActiveMenu(item.id)} suppressHydrationWarning={true} className={`group relative bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl ${item.borderColor} transition-all duration-500 overflow-hidden h-40 flex flex-col justify-end text-left`}><div className={`absolute -bottom-4 -right-4 opacity-10 rotate-12 group-hover:rotate-0 group-hover:opacity-40 group-hover:scale-110 transition-all duration-500 ease-out ${item.watermarkColor}`}>{item.icon}</div><div className="relative z-10"><p className={`font-bold text-[10px] uppercase tracking-[0.2em] mb-1 ${item.subTextColor}`}>{item.desc}</p><h4 className={`font-serif font-bold text-3xl text-gray-900 ${item.textColor} transition-colors tracking-tight`}>{item.title}</h4></div></button>))}</div>)}

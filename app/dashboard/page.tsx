@@ -203,7 +203,7 @@ export default function DashboardPage() {
       {/* --- 3. ACTIVE PROJECT --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-3 shadow-sm border border-gray-100 flex flex-col md:flex-row group hover:border-pink-100 transition-colors">
-              <div onClick={openPreview} className="w-full md:w-2/5 h-64 md:h-auto relative rounded-[2rem] overflow-hidden cursor-pointer">
+              <div onClick={openPreview} className="w-full md:w-2/5 h-64 md:h-auto relative rounded-4xl overflow-hidden cursor-pointer">
                   <Image src={data.activeProject.image} alt="Invitation Preview" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent flex items-end p-6">
                       <span className="px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] font-bold rounded-full uppercase tracking-widest">Active Theme</span>

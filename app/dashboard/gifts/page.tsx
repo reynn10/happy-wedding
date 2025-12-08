@@ -79,9 +79,9 @@ export default function GiftsPage() {
               {isLoading ? <p>Memuat...</p> : gifts.length === 0 ? <p className="text-gray-400">Belum ada rekening.</p> : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {gifts.map((gift) => (
-                        <div key={gift.id} className="group relative w-full aspect-[1.586/1] rounded-[2rem] shadow-xl overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
+                        <div key={gift.id} className="group relative w-full aspect-[1.586/1] rounded-4xl shadow-xl overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
                             <div className={`absolute inset-0 bg-linear-to-br ${gift.bank_name.toLowerCase().includes('bca') ? 'from-[#00529C] to-[#003366]' : 'from-[#FFB800] via-[#F29600] to-[#b46d00]'}`}></div>
-                            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white to-transparent"></div>
+                            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,var(--tw-gradient-stops))] from-white to-transparent"></div>
                             <div className="relative h-full p-6 flex flex-col justify-between text-white">
                                 <div className="flex justify-between items-start">
                                     <span className="font-bold tracking-widest text-sm uppercase">{gift.bank_name}</span>
