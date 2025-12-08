@@ -258,10 +258,10 @@ export default function InvitationPage() {
                     <div className="relative w-full lg:max-w-[280px] h-[640px] sm:h-[720px] lg:h-[580px] bg-gray-900 rounded-[2.5rem] border-8 border-gray-800 shadow-2xl overflow-hidden">
                       <iframe 
                         src={getPreviewUrl()}
-                        className="w-full h-full bg-white hide-scrollbar"
+                        className="w-full h-full bg-gray-900 hide-scrollbar [&::-webkit-scrollbar]:hidden"
                         style={{ border: 'none', overflow: 'auto' }}
                         title="Live Preview"
-                        scrolling="no"
+                        scrolling="yes"
                       />
                   </div>
               </div>
