@@ -103,6 +103,20 @@ function InvitationContent() {
     loadData();
   }, [searchParams]);
 
+  // Jika preview diminta untuk menyembunyikan scrollbar (dari dashboard),
+  // tambahkan style ke head dokumen agar scrollbar tidak terlihat pada desktop.
+  useEffect(() => {
+    const hide = searchParams.get('hideScroll');
+    if (!hide) return;
+    const styleId = 'hide-scrollbar-demo';
+    if (document.getElementById(styleId)) return;
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.innerHTML = `@media (min-width:1024px){html,body{scrollbar-width:none;-ms-overflow-style:none;}*::-webkit-scrollbar{display:none;width:0;height:0;}}`;
+    document.head.appendChild(style);
+    return () => { document.getElementById(styleId)?.remove(); };
+  }, [searchParams]);
+
   // --- 2. COUNTDOWN ---
   useEffect(() => {
     const targetDate = new Date("2025-12-12T08:00:00").getTime();

@@ -78,6 +78,8 @@ export default function InvitationPage() {
     // PENTING: Kirim userId agar halaman demo tau rekening siapa yang harus diambil
     if (userId) params.set('uid', userId); 
     
+    // Tambah flag agar halaman demo bisa menyembunyikan scrollbar pada desktop
+    params.set('hideScroll', '1');
     return `/invitation/demo?${params.toString()}&t=${refreshKey}`;
   };
 
@@ -259,7 +261,7 @@ export default function InvitationPage() {
                         className="w-full h-full bg-white hide-scrollbar"
                         style={{ border: 'none', overflow: 'auto' }}
                         title="Live Preview"
-                        scrolling="yes"
+                        scrolling="no"
                       />
                   </div>
               </div>
