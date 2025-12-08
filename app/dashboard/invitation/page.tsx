@@ -253,13 +253,13 @@ export default function InvitationPage() {
             <div className="lg:col-span-1 lg:sticky lg:top-8">
               <div className="bg-white rounded-[3rem] p-4 shadow-sm border border-gray-100 flex justify-center items-center relative overflow-hidden group">
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-                <div className="relative w-full max-w-[280px] h-[420px] sm:h-[520px] lg:w-[280px] lg:h-[580px] bg-gray-900 rounded-[2.5rem] border-8 border-gray-800 shadow-2xl overflow-hidden">
+                    <div className="relative w-full lg:max-w-[280px] h-[640px] sm:h-[720px] lg:h-[580px] bg-gray-900 rounded-[2.5rem] border-8 border-gray-800 shadow-2xl overflow-hidden">
                       <iframe 
-                        src={getPreviewUrl()}
-                  className="w-full h-full bg-white [&::-webkit-scrollbar]:hidden"
-                        style={{ border: 'none', overflow: 'hidden' }}
-                        title="Live Preview"
-                        scrolling="no" 
+                    src={getPreviewUrl()}
+                    className="w-full h-full bg-white"
+                    style={{ border: 'none', overflow: 'auto' }}
+                    title="Live Preview"
+                    scrolling="yes"
                       />
                   </div>
               </div>
