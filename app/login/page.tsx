@@ -1,8 +1,10 @@
-'use client'; // WAJIB: Tambahkan ini agar animasi bisa jalan
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 
 // --- DATA TESTIMONI ---
 const testimonials = [
@@ -11,28 +13,32 @@ const testimonials = [
     name: "Sarah & Dimas",
     role: "Menikah Desember 2024",
     text: "Sangat terbantu dengan fitur RSVP-nya. Kami jadi tahu pasti jumlah tamu yang datang. Desainnya juga aesthetic banget!",
-    avatar: "https://images.unsplash.com/photo-1623091411315-266390560623?w=100&q=60" // Wanita
+    avatar: "https://images.unsplash.com/photo-1623091411315-266390560623?w=100&q=60" 
   },
   {
     id: 2,
     name: "Reza & Putri",
     role: "Menikah Februari 2025",
     text: "Fitur kirim WhatsApp-nya juara! Hemat waktu banget, nggak perlu ngetik satu-satu. Worth every penny.",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=60" // Pria
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=60" 
   },
   {
     id: 3,
     name: "Bella & Edward",
     role: "Menikah Maret 2025",
     text: "Suka banget sama tema 'Classic Elegant'. Simpel tapi mewah. Tamu-tamu kami banyak yang nanya bikin di mana.",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=60" // Wanita
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=60" 
   }
 ];
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [currentTesti, setCurrentTesti] = useState(0);
 
-  // Logic: Ganti testimoni setiap 4 detik
+  // Auto-rotate testimonial
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTesti((prev) => (prev + 1) % testimonials.length);
@@ -41,6 +47,39 @@ export default function LoginPage() {
   }, []);
 
   const activeData = testimonials[currentTesti];
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        alert("Login gagal: " + error.message);
+      } else {
+        // alert("Login berhasil! Mengarahkan ke dashboard..."); // Opsional
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      alert("Terjadi kesalahan sistem.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+    if (error) alert(error.message);
+  };
 
   return (
     <div className="min-h-screen flex bg-white font-sans selection:bg-pink-100 selection:text-pink-600">
@@ -74,7 +113,6 @@ export default function LoginPage() {
                 {/* --- TESTIMONIAL CARD (ROTATING) --- */}
                 <div className="backdrop-blur-md bg-white/10 border border-white/20 p-6 rounded-2xl max-w-md shadow-2xl relative overflow-hidden min-h-[180px] flex flex-col justify-center">
                     
-                    {/* Key = activeData.id akan memicu animasi ulang saat data berubah */}
                     <div key={activeData.id} className="animate-fade-in-up">
                         <div className="flex items-center gap-4 mb-3">
                             <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/50 relative shrink-0">
@@ -113,9 +151,7 @@ export default function LoginPage() {
                 </div>
             </div>
 
-            <div className="flex gap-2 opacity-0">
-                {/* Spacer bawah */}
-            </div>
+            <div className="flex gap-2 opacity-0"></div>
         </div>
       </div>
 
@@ -124,9 +160,9 @@ export default function LoginPage() {
         
         <Link href="/" className="absolute top-8 left-8 flex items-center gap-2 text-gray-400 hover:text-gray-900 transition-colors group">
             <div className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center group-hover:border-gray-900 transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             </div>
-            <span className="text-sm font-medium">Kembali</span>
+            <span className="text-sm font-medium">Beranda</span>
         </Link>
 
         <div className="max-w-[400px] w-full animate-fade-in-up">
@@ -139,7 +175,11 @@ export default function LoginPage() {
                 <p className="text-gray-500">Masuk untuk melanjutkan desain undangan Anda.</p>
             </div>
 
-            <button className="w-full bg-white border border-gray-200 text-gray-700 font-medium py-3.5 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-50 hover:border-gray-300 transition-all mb-8 shadow-xs">
+            <button 
+                onClick={handleGoogleLogin} 
+                suppressHydrationWarning={true} // FIX ERROR
+                className="w-full bg-white border border-gray-200 text-gray-700 font-medium py-3.5 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-50 hover:border-gray-300 transition-all mb-8 shadow-xs"
+            >
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google"/>
                 Masuk dengan Google
             </button>
@@ -149,10 +189,18 @@ export default function LoginPage() {
                 <div className="relative flex justify-center text-xs uppercase tracking-widest"><span className="px-3 bg-white text-gray-400">Atau login manual</span></div>
             </div>
 
-            <form className="space-y-5">
+            <form onSubmit={handleLogin} className="space-y-5">
                 <div className="space-y-1">
                     <label className="block text-sm font-semibold text-gray-700 ml-1">Email</label>
-                    <input type="email" className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 text-gray-900 focus:bg-white focus:ring-2 focus:ring-pink-100 focus:border-pink-500 outline-none transition-all placeholder:text-gray-400" placeholder="contoh@email.com" />
+                    <input 
+                        type="email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        suppressHydrationWarning={true} // FIX ERROR
+                        required
+                        className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 text-gray-900 focus:bg-white focus:ring-2 focus:ring-pink-100 focus:border-pink-500 outline-none transition-all placeholder:text-gray-400" 
+                        placeholder="contoh@email.com" 
+                    />
                 </div>
                 
                 <div className="space-y-1">
@@ -160,11 +208,24 @@ export default function LoginPage() {
                         <label className="block text-sm font-semibold text-gray-700">Password</label>
                         <a href="#" className="text-sm text-pink-600 hover:text-pink-700 font-medium hover:underline">Lupa?</a>
                     </div>
-                    <input type="password" className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 text-gray-900 focus:bg-white focus:ring-2 focus:ring-pink-100 focus:border-pink-500 outline-none transition-all placeholder:text-gray-400" placeholder="••••••••" />
+                    <input 
+                        type="password" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        suppressHydrationWarning={true} // FIX ERROR
+                        required
+                        className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 text-gray-900 focus:bg-white focus:ring-2 focus:ring-pink-100 focus:border-pink-500 outline-none transition-all placeholder:text-gray-400" 
+                        placeholder="••••••••" 
+                    />
                 </div>
 
-                <button type="button" className="w-full bg-pink-600 text-white font-bold py-4 rounded-xl hover:bg-pink-700 active:scale-95 transition-all shadow-[0_10px_20px_-10px_rgba(219,39,119,0.5)] mt-4">
-                    Masuk Sekarang
+                <button 
+                    type="submit" 
+                    disabled={loading}
+                    suppressHydrationWarning={true} // FIX ERROR
+                    className="w-full bg-pink-600 text-white font-bold py-4 rounded-xl hover:bg-pink-700 active:scale-95 transition-all shadow-[0_10px_20px_-10px_rgba(219,39,119,0.5)] mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                    {loading ? 'Memproses...' : 'Masuk Sekarang'}
                 </button>
             </form>
 
