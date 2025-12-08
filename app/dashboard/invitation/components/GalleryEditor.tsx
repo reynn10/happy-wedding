@@ -79,16 +79,11 @@ export default function GalleryEditor({ data, handleInputChange, onUpload, isUpl
       {/* --- GALERI MOMEN (INDIGO) --- */}
       <div className="group relative bg-white rounded-[2.5rem] p-8 shadow-sm border border-indigo-100 hover:shadow-xl hover:border-indigo-200 transition-all duration-500 overflow-hidden">
         
-        {/* Watermark Icon (Polaroid Artistik) */}
-        {/* Menggunakan 3 layer foto: Kiri, Kanan, Tengah dengan fill-rule evenodd untuk efek bingkai foto */}
+        {/* Watermark Icon (Film Strip / Klise Film Solid - Artistik) */}
+        {/* Menggambarkan kumpulan momen/memori dengan gaya sinematik */}
         <div className="absolute -bottom-6 -right-6 text-indigo-500 opacity-40 rotate-12 group-hover:rotate-0 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500 ease-out">
-            <svg className="w-48 h-48" viewBox="0 0 24 24" fill="currentColor" fillRule="evenodd">
-                 {/* Foto Kiri (Miring) */}
-                 <path d="M4.5 15.5l1-9 6 1-1 9-6-1z" opacity="0.3" />
-                 {/* Foto Kanan (Miring) */}
-                 <path d="M19.5 15.5l-1-9-6 1 1 9 6-1z" opacity="0.3" />
-                 {/* Foto Tengah (Polaroid Frame) */}
-                 <path d="M8 4h8c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm1 2v9h6V6H9z" />
+            <svg className="w-48 h-48" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/>
             </svg>
         </div>
 
