@@ -1,10 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+// Ambil variable dari environment
+const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const envKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Cek agar tidak error saat build time jika env belum load
-export const supabase = createClient(
-  supabaseUrl, 
-  supabaseAnonKey
-);
+// LOGIKA ANTI-CRASH:
+// Jika envUrl kosong (saat build time), pakai URL dummy yang valid secara format.
+// Ini mencegah error "Invalid URL" yang mematikan proses build Vercel.
+const supabaseUrl = envUrl && envUrl.startsWith('http') 
+  ? envUrl 
+  : 'https://placeholder.supabase.co'; // URL Dummy aman
+
+const supabaseAnonKey = envKey || 'placeholder-key';
+
+// Membuat client dengan URL yang pasti valid (asli atau dummy)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
