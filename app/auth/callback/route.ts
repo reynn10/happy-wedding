@@ -6,14 +6,12 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
   
-  // Jika ada parameter 'next', gunakan sebagai tujuan redirect, jika tidak ke dashboard
+  // Jika ada parameter 'next', gunakan sebagai tujuan redirect
   const next = searchParams.get('next') ?? '/dashboard';
 
   if (code) {
-    // PERBAIKAN: Tambahkan 'await' di sini karena cookies() mengembalikan Promise
     const cookieStore = await cookies();
     
-    // Membuat client Supabase untuk server-side (Route Handler)
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -32,14 +30,20 @@ export async function GET(request: Request) {
       }
     );
     
-    // Menukar auth code dengan session
+    // Tukar auth code dengan session
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     
     if (!error) {
+      // BERHASIL: Redirect ke dashboard
       return NextResponse.redirect(`${origin}${next}`);
+    } else {
+      // GAGAL: Log error ke terminal VS Code untuk debugging
+      console.error("🔥 Login Callback Error:", error.message);
     }
+  } else {
+    console.error("🔥 No code found in URL");
   }
 
-  // Jika gagal, kembalikan ke login dengan pesan error
+  // Jika gagal, kembalikan ke login
   return NextResponse.redirect(`${origin}/login?error=auth`);
 }

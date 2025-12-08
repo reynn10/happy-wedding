@@ -72,13 +72,17 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        // window.location.origin otomatis mendeteksi apakah sedang di localhost atau vercel
-        redirectTo: `${window.location.origin}/auth/callback`, 
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
       },
     });
+    
     if (error) alert(error.message);
   };
   
