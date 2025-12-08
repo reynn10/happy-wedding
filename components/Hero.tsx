@@ -35,7 +35,7 @@ export default function Hero() {
            </div>
            
            {/* HEADLINE */}
-           <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight font-serif drop-shadow-lg">
+           <h1 className="text-4xl sm:text-5xl md:text-5xl font-extrabold text-white leading-tight font-serif drop-shadow-lg">
               Abadikan Momen <br/>
               <span className="text-transparent bg-clip-text bg-linear-to-r from-pink-400 to-purple-400">
                 Penuh Cinta
@@ -73,7 +73,7 @@ export default function Hero() {
             
             <div className="absolute w-[400px] h-[400px] bg-pink-500 rounded-full blur-[120px] opacity-20 animate-pulse"></div>
 
-            <div className="relative w-72 h-[520px] bg-black rounded-[3rem] border-8 border-gray-800 shadow-2xl z-10 overflow-hidden transform transition hover:scale-105 duration-500">
+            <div className="relative w-70 h-[520px] bg-black rounded-[3rem] border-8 border-gray-800 shadow-2xl z-10 overflow-hidden transform transition hover:scale-105 duration-500">
                 <Image 
                     src="https://images.unsplash.com/photo-1504903669937-2f825bf5956f" 
                     alt="Main App" fill className="object-cover opacity-90"
@@ -87,7 +87,7 @@ export default function Hero() {
                 </div>
             </div>
 
-            <div className="absolute top-20 -left-4 bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 animate-[bounce_3s_infinite] z-20 max-w-[200px]">
+            <div className="absolute top-20 -left-2 bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 animate-[bounce_3s_infinite] z-20 max-w-[200px]">
                 <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
                 </div>
@@ -97,7 +97,7 @@ export default function Hero() {
                 </div>
             </div>
 
-            <div className="absolute top-1/2 -right-8 bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 animate-[pulse_4s_infinite] z-20 max-w-[220px]">
+            <div className="absolute top-1/2 -right-4 bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 animate-[pulse_4s_infinite] z-20 max-w-[220px]">
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
