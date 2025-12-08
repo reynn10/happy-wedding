@@ -43,12 +43,38 @@ export default function InvitationPage() {
         </div>
 
         <div className="space-y-6 overflow-y-auto custom-scrollbar pr-2 pb-4">
+          {/* Couple & Date Editor menggunakan 'handleInputChange' */}
           {activeMenu === 'mempelai' && <CoupleEditor data={data} handleInputChange={handleInputChange} />}
           {activeMenu === 'acara' && <DateEditor data={data} handleInputChange={handleInputChange} />}
-          {activeMenu === 'galeri' && <GalleryEditor data={data} handleInputChange={handleInputChange} handleImageUpload={handleImageUpload} isUploading={isUploading} />}
-          {activeMenu === 'cerita' && <StoryEditor data={data} handleInputChange={handleInputChange} />}
+          
+          {/* GalleryEditor: Ubah 'handleImageUpload' jadi 'onUpload' */}
+          {activeMenu === 'galeri' && (
+            <GalleryEditor 
+              data={data} 
+              handleInputChange={handleInputChange} 
+              onUpload={handleImageUpload}  // PERBAIKAN DI SINI
+              isUploading={isUploading} 
+            />
+          )}
+
+          {/* StoryEditor: Ubah 'handleInputChange' jadi 'onChange' */}
+          {activeMenu === 'cerita' && (
+            <StoryEditor 
+              data={data} 
+              onChange={handleInputChange} // PERBAIKAN DI SINI
+            />
+          )}
+
+          {/* MusicEditor biasanya menggunakan 'handleInputChange' atau 'onChange' tergantung definisi Anda. Asumsikan handleInputChange */}
           {activeMenu === 'musik' && <MusicEditor data={data} handleInputChange={handleInputChange} />}
-          {activeMenu === 'tema' && <ThemeEditor data={data} handleThemeChange={handleThemeChange} />}
+          
+          {/* ThemeEditor: Ubah 'handleThemeChange' jadi 'onThemeChange' */}
+          {activeMenu === 'tema' && (
+            <ThemeEditor 
+              data={data} 
+              onThemeChange={handleThemeChange} // PERBAIKAN DI SINI
+            />
+          )}
 
           <button onClick={handleSave} disabled={isSaving || isUploading} suppressHydrationWarning={true} className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-gray-800 transition shadow-lg mt-4 disabled:opacity-50">
             {isSaving ? "Menyimpan..." : "Simpan Perubahan"}

@@ -4,79 +4,73 @@ import React from 'react';
 
 type Props = {
   data: any;
-  handleInputChange: (e: any) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
+const songs = [
+  { value: "Beautiful in White - Shane Filan", label: "Beautiful in White (Shane Filan)" },
+  { value: "A Thousand Years - Christina Perri", label: "A Thousand Years (Christina Perri)" },
+  { value: "Perfect - Ed Sheeran", label: "Perfect (Ed Sheeran)" },
+  { value: "Marry Your Daughter - Brian McKnight", label: "Marry Your Daughter (Brian McKnight)" },
+  { value: "Canon in D - Pachelbel", label: "Canon in D (Classic Instrumental)" },
+];
+
 export default function MusicEditor({ data, handleInputChange }: Props) {
-  const songs = [
-    { id: 1, title: 'Beautiful in White', artist: 'Shane Filan', duration: '3:42' },
-    { id: 2, title: 'A Thousand Years', artist: 'Christina Perri', duration: '4:13' },
-    { id: 3, title: 'Perfect', artist: 'Ed Sheeran', duration: '3:44' },
-    { id: 4, title: 'All of Me', artist: 'John Legend', duration: '4:27' },
-    { id: 5, title: 'Marry You', artist: 'Bruno Mars', duration: '3:50' },
-  ];
-
-  const currentSong = songs.find(s => s.title === data.music);
-
   return (
-    <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-3xl p-8 bg-linear-to-br from-amber-50 via-white to-orange-50 border border-amber-200/50 backdrop-blur-sm shadow-xl">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-amber-400 to-transparent"></div>
+    <div className="grid gap-6">
+      
+      {/* --- MUSIK LATAR (ORANGE) --- */}
+      <div className="group relative bg-white rounded-[2.5rem] p-8 shadow-sm border border-orange-100 hover:shadow-xl hover:border-orange-200 transition-all duration-500 overflow-hidden">
         
-        <div className="mb-6 pb-6 border-b border-amber-200/30">
-          <h4 className="text-sm font-bold text-amber-900 uppercase tracking-widest mb-1">🎵 Pilih Musik Latar</h4>
-          <p className="text-xs text-amber-700/80 font-light">Musik yang akan menemani tamu membuka undangan</p>
+        {/* Watermark Icon (Nada Musik Solid) */}
+        <div className="absolute -bottom-6 -right-6 text-orange-500 opacity-40 rotate-12 group-hover:rotate-0 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500 ease-out">
+            <svg className="w-48 h-48" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
         </div>
 
-        <div className="grid grid-cols-1 gap-3">
-          {songs.map((song) => (
-            <button
-              key={song.id}
-              onClick={() => handleInputChange({ target: { name: 'music', value: song.title } } as any)}
-              suppressHydrationWarning={true}
-              className={`relative overflow-hidden rounded-2xl px-6 py-4 text-left transition-all duration-300 group ${
-                data.music === song.title
-                  ? 'bg-linear-to-r from-amber-200 to-orange-200 border-2 border-amber-400 shadow-lg scale-105'
-                  : 'bg-white border-2 border-amber-200 hover:border-amber-300 hover:shadow-md hover:bg-amber-50/30'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className={`text-sm font-semibold ${data.music === song.title ? 'text-amber-950' : 'text-gray-900'}`}>
-                    ♪ {song.title}
-                  </div>
-                  <div className={`text-xs mt-1.5 font-light ${data.music === song.title ? 'text-amber-900' : 'text-gray-600'}`}>
-                    {song.artist}
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className={`text-xs font-semibold tabular-nums ${data.music === song.title ? 'text-amber-900' : 'text-gray-500'}`}>
-                    {song.duration}
-                  </span>
-                  {data.music === song.title && (
-                    <div className="flex gap-1">
-                      <div className="w-1 h-3 bg-amber-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-1 h-3 bg-orange-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-1 h-3 bg-amber-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        <div className="relative z-10">
+            <div className="mb-6">
+                <h3 className="font-serif font-bold text-2xl text-gray-900 group-hover:text-orange-600 transition-colors">Musik Latar</h3>
+                <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Backsound</p>
+            </div>
+
+            <div className="space-y-2 group/input">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1 group-hover/input:text-gray-600 transition-colors">
+                    Pilih Lagu
+                </label>
+                <div className="relative">
+                    <select 
+                        name="music" 
+                        value={data.music} 
+                        onChange={handleInputChange} 
+                        className="w-full px-6 py-4 bg-stone-50/50 rounded-2xl border border-stone-100 outline-none 
+                        text-gray-900 font-medium cursor-pointer appearance-none
+                        focus:bg-white focus:ring-2 focus:ring-orange-100 focus:border-orange-200 
+                        transition-all duration-300 ease-out shadow-inner hover:bg-white hover:border-gray-200"
+                    >
+                        {songs.map((song) => (
+                            <option key={song.value} value={song.value}>{song.label}</option>
+                        ))}
+                    </select>
+                    
+                    {/* Custom Chevron Icon */}
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
                     </div>
-                  )}
                 </div>
-              </div>
-              {data.music === song.title && (
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-linear-to-r from-amber-400 to-orange-400"></div>
-              )}
-            </button>
-          ))}
+            </div>
+
+            {/* Audio Visualizer Decoration */}
+            <div className="mt-8 flex items-end gap-1 h-8 opacity-50">
+                {[...Array(10)].map((_, i) => (
+                    <div key={i} className="w-1.5 bg-orange-300 rounded-full animate-pulse" style={{ height: `${Math.random() * 100}%`, animationDelay: `${i * 0.1}s` }}></div>
+                ))}
+            </div>
+
         </div>
       </div>
 
-      {currentSong && (
-        <div className="relative overflow-hidden rounded-2xl p-4 bg-linear-to-r from-amber-100 to-orange-100 border-2 border-amber-300 shadow-md">
-          <p className="text-sm text-amber-900 font-semibold">
-            <span className="text-base">♪</span> {currentSong.title} - {currentSong.artist}
-          </p>
-        </div>
-      )}
     </div>
   );
 }
