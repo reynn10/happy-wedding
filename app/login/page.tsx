@@ -75,12 +75,13 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/dashboard`,
+        // window.location.origin otomatis mendeteksi apakah sedang di localhost atau vercel
+        redirectTo: `${window.location.origin}/auth/callback`, 
       },
     });
     if (error) alert(error.message);
   };
-
+  
   return (
     <div className="min-h-screen flex bg-white font-sans selection:bg-pink-100 selection:text-pink-600">
       
