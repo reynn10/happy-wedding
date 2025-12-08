@@ -85,7 +85,7 @@ export default function InvitationPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-fade-in-up">
               {menuItems.map((item) => (
                 <button key={item.id} onClick={() => setActiveMenu(item.id)} suppressHydrationWarning={true} className={`group relative bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl ${item.borderColor} transition-all duration-500 overflow-hidden h-40 flex flex-col justify-end text-left`}>
-                  <div className={`absolute -bottom-4 -right-4 opacity-10 rotate-12 group-hover:rotate-0 group-hover:opacity-40 group-hover:scale-110 transition-all duration-500 ease-out ${item.watermarkColor}`}>{item.icon}</div>
+                  <div className={`absolute -bottom-4 -right-4 opacity-40 rotate-12 group-hover:rotate-0 group-hover:opacity-40 group-hover:scale-110 transition-all duration-500 ease-out ${item.watermarkColor}`}>{item.icon}</div>
                   <div className="relative z-10">
                     <p className={`font-bold text-[10px] uppercase tracking-[0.2em] mb-1 ${item.subTextColor}`}>{item.desc}</p>
                     <h4 className={`font-serif font-bold text-3xl text-gray-900 ${item.textColor} transition-colors tracking-tight`}>{item.title}</h4>

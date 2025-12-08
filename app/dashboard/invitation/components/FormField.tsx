@@ -4,77 +4,66 @@ import React from 'react';
 
 type Props = {
   label: string;
-  icon?: React.ReactNode;
-  placeholder?: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   type?: string;
   name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
   hint?: string;
-  multiline?: boolean;
-  accentColor?: string;
+  accentColor?: 'pink' | 'blue' | 'purple' | 'teal' | 'orange' | 'red' | 'green' | 'emerald';
 };
 
-export default function FormField({
-  label,
-  icon,
-  placeholder,
-  value,
-  onChange,
-  type = 'text',
-  name,
+export default function FormField({ 
+  label, 
+  type = "text", 
+  name, 
+  value, 
+  onChange, 
+  placeholder, 
   hint,
-  multiline = false,
-  accentColor = 'pink',
+  accentColor = 'pink' 
 }: Props) {
-  const accentColors = {
-    pink: { ring: 'focus:ring-pink-500', border: 'focus:border-pink-300', light: 'bg-pink-500/5' },
-    blue: { ring: 'focus:ring-blue-500', border: 'focus:border-blue-300', light: 'bg-blue-500/5' },
-    purple: { ring: 'focus:ring-purple-500', border: 'focus:border-purple-300', light: 'bg-purple-500/5' },
-    red: { ring: 'focus:ring-red-500', border: 'focus:border-red-300', light: 'bg-red-500/5' },
-    orange: { ring: 'focus:ring-orange-500', border: 'focus:border-orange-300', light: 'bg-orange-500/5' },
-    teal: { ring: 'focus:ring-teal-500', border: 'focus:border-teal-300', light: 'bg-teal-500/5' },
+
+  // Mapping warna focus ring agar sesuai dengan accentColor
+  const focusColors: Record<string, string> = {
+    pink: 'focus:ring-pink-100 focus:border-pink-200',
+    blue: 'focus:ring-blue-100 focus:border-blue-200',
+    purple: 'focus:ring-purple-100 focus:border-purple-200',
+    teal: 'focus:ring-teal-100 focus:border-teal-200',
+    emerald: 'focus:ring-emerald-100 focus:border-emerald-200',
+    green: 'focus:ring-green-100 focus:border-green-200',
+    orange: 'focus:ring-orange-100 focus:border-orange-200',
+    red: 'focus:ring-red-100 focus:border-red-200',
   };
 
-  const colors = (accentColors as any)[accentColor] || accentColors.pink;
-  const inputBase = `w-full px-6 py-4 bg-white/60 backdrop-blur-md border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 text-gray-900 font-medium placeholder:text-gray-400 placeholder:font-light hover:border-gray-300 hover:bg-white/80 hover:shadow-lg ${colors.ring} ${colors.border} ring-offset-0 focus:shadow-2xl focus:shadow-${accentColor}-200/50`;
-
-  if (multiline) {
-    return (
-      <div className="group">
-        <div className="flex items-center gap-3 mb-4">
-          {icon && <div className="text-xl">{icon}</div>}
-          <label className="text-sm font-bold text-gray-800 uppercase tracking-widest">{label}</label>
-        </div>
-        <textarea
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          suppressHydrationWarning={true}
-          className={`${inputBase} resize-none min-h-[140px]`}
-        />
-        {hint && <p className="text-xs text-gray-600 mt-2 font-light">{hint}</p>}
-      </div>
-    );
-  }
+  const selectedColor = focusColors[accentColor] || focusColors.pink;
 
   return (
-    <div className="group">
-      <div className="flex items-center gap-3 mb-4">
-        {icon && <div className="text-xl">{icon}</div>}
-        <label className="text-sm font-bold text-gray-800 uppercase tracking-widest">{label}</label>
+    <div className="space-y-2 group">
+      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1 group-hover:text-gray-600 transition-colors">
+        {label}
+      </label>
+      
+      <div className="relative">
+          <input 
+            type={type} 
+            name={name} 
+            value={value} 
+            onChange={onChange} 
+            placeholder={placeholder}
+            className={`w-full px-6 py-4 bg-stone-50/50 rounded-2xl border border-stone-100 outline-none 
+              text-gray-900 font-medium placeholder:text-gray-300
+              focus:bg-white focus:ring-2 ${selectedColor}
+              transition-all duration-300 ease-out shadow-inner
+              hover:bg-white hover:border-gray-200`} 
+          />
       </div>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        suppressHydrationWarning={true}
-        className={inputBase}
-      />
-      {hint && <p className="text-xs text-gray-600 mt-2 font-light">{hint}</p>}
+
+      {hint && (
+        <p className="text-[10px] text-gray-400 ml-2 italic opacity-0 group-hover:opacity-100 transition-opacity">
+            {hint}
+        </p>
+      )}
     </div>
   );
 }
