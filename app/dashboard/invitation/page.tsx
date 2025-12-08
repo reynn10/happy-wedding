@@ -43,7 +43,7 @@ export default function InvitationPage() {
         </div>
 
         <div className="space-y-6 overflow-y-auto custom-scrollbar pr-2 pb-4">
-          {activeMenu === 'mempelai' && <CoupleEditor data={data} handleInputChange={handleInputChange} setActiveMenu={setActiveMenu} />}
+          {activeMenu === 'mempelai' && <CoupleEditor data={data} handleInputChange={handleInputChange} />}
           {activeMenu === 'acara' && <DateEditor data={data} handleInputChange={handleInputChange} />}
           {activeMenu === 'galeri' && <GalleryEditor data={data} handleInputChange={handleInputChange} handleImageUpload={handleImageUpload} isUploading={isUploading} />}
           {activeMenu === 'cerita' && <StoryEditor data={data} handleInputChange={handleInputChange} />}

@@ -1,24 +1,59 @@
 'use client';
 
 import React from 'react';
+import FormField from './FormField';
 
 type Props = {
   data: any;
   handleInputChange: (e: any) => void;
-  setActiveMenu: (v: null) => void;
 };
 
-export default function CoupleEditor({ data, handleInputChange, setActiveMenu }: Props) {
+export default function CoupleEditor({ data, handleInputChange }: Props) {
   return (
-    <>
-      <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Mempelai Pria</label>
-        <input type="text" name="groomName" value={data.groomName} onChange={handleInputChange} suppressHydrationWarning={true} className="w-full p-4 bg-stone-50 rounded-2xl border border-stone-100 outline-none focus:ring-2 focus:ring-pink-200 transition text-gray-900 font-medium" />
+    <div className="space-y-6">
+      {/* Bride Section */}
+      <div className="relative overflow-hidden rounded-3xl p-8 bg-linear-to-br from-rose-50 via-white to-pink-50 border border-rose-200/50 backdrop-blur-sm shadow-xl">
+        {/* Luxury accent line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-rose-400 to-transparent"></div>
+        
+        <div className="mb-6 pb-6 border-b border-rose-200/30">
+          <h4 className="text-sm font-bold text-rose-900 uppercase tracking-widest mb-1">👰 Pengantin Wanita</h4>
+          <p className="text-xs text-rose-700/80 font-light">Masukkan nama lengkap mempelai wanita dengan elegan</p>
+        </div>
+
+        <FormField
+          label="Nama Lengkap"
+          icon="💎"
+          placeholder="Contoh: Siti Nurhaliza"
+          name="brideName"
+          value={data.brideName}
+          onChange={handleInputChange}
+          accentColor="pink"
+          hint="Tulis dengan nama resmi dan lengkap"
+        />
       </div>
-      <div className="space-y-2">
-        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Mempelai Wanita</label>
-        <input type="text" name="brideName" value={data.brideName} onChange={handleInputChange} suppressHydrationWarning={true} className="w-full p-4 bg-stone-50 rounded-2xl border border-stone-100 outline-none focus:ring-2 focus:ring-pink-200 transition text-gray-900 font-medium" />
+
+      {/* Groom Section */}
+      <div className="relative overflow-hidden rounded-3xl p-8 bg-linear-to-br from-blue-50 via-white to-cyan-50 border border-blue-200/50 backdrop-blur-sm shadow-xl">
+        {/* Luxury accent line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-blue-400 to-transparent"></div>
+        
+        <div className="mb-6 pb-6 border-b border-blue-200/30">
+          <h4 className="text-sm font-bold text-blue-900 uppercase tracking-widest mb-1">🤵 Pengantin Pria</h4>
+          <p className="text-xs text-blue-700/80 font-light">Masukkan nama lengkap mempelai pria dengan elegan</p>
+        </div>
+
+        <FormField
+          label="Nama Lengkap"
+          icon="💎"
+          placeholder="Contoh: Reza Ismaya"
+          name="groomName"
+          value={data.groomName}
+          onChange={handleInputChange}
+          accentColor="blue"
+          hint="Tulis dengan nama resmi dan lengkap"
+        />
       </div>
-    </>
+    </div>
   );
 }
