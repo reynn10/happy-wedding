@@ -94,7 +94,7 @@ export default function LoginPage() {
         
         {/* Background Image */}
         <Image 
-            src="https://images.unsplash.com/photo-1519225468359-2996bc01c37c?q=80&w=2070"
+            src="https://images.unsplash.com/photo-1707097702231-f0b98d7c2703?q=80&w=1170"
             alt="Wedding Background"
             fill
             className="object-cover opacity-60"
