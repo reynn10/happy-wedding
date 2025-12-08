@@ -255,11 +255,11 @@ export default function InvitationPage() {
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
                     <div className="relative w-full lg:max-w-[280px] h-[640px] sm:h-[720px] lg:h-[580px] bg-gray-900 rounded-[2.5rem] border-8 border-gray-800 shadow-2xl overflow-hidden">
                       <iframe 
-                    src={getPreviewUrl()}
-                    className="w-full h-full bg-white"
-                    style={{ border: 'none', overflow: 'auto' }}
-                    title="Live Preview"
-                    scrolling="yes"
+                        src={getPreviewUrl()}
+                        className="w-full h-full bg-white hide-scrollbar"
+                        style={{ border: 'none', overflow: 'auto' }}
+                        title="Live Preview"
+                        scrolling="yes"
                       />
                   </div>
               </div>
