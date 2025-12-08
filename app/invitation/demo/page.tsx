@@ -61,6 +61,7 @@ function InvitationContent() {
       const paramVenue = searchParams.get('venue');
       const paramCover = searchParams.get('cover');
       const paramTo = searchParams.get('to');
+      const paramUid = searchParams.get('uid');
 
       if (paramTo) setGuestName(decodeURIComponent(paramTo));
 
@@ -73,6 +74,12 @@ function InvitationContent() {
             venue: paramVenue || prev.venue,
             cover_photo: paramCover || prev.cover_photo
          }));
+         
+         // Ambil data rekening berdasarkan user ID dari parameter
+         if (paramUid) {
+            const { data: giftData } = await supabase.from('gifts').select('*').eq('user_id', paramUid);
+            if (giftData) setGifts(giftData);
+         }
          setHasLoaded(true);
       } else {
          const { data: dbData } = await supabase.from('invitations').select('*').limit(1).single();
@@ -85,9 +92,11 @@ function InvitationContent() {
                 cover_photo: dbData.cover_photo || "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=600",
                 theme_color: dbData.theme_color || "Pink"
             });
+            
+            // Ambil data rekening berdasarkan user_id dari invitations
+            const { data: giftData } = await supabase.from('gifts').select('*').eq('user_id', dbData.user_id);
+            if (giftData) setGifts(giftData);
          }
-         const { data: giftData } = await supabase.from('gifts').select('*');
-         if (giftData) setGifts(giftData);
          setHasLoaded(true);
       }
     };
@@ -135,7 +144,7 @@ function InvitationContent() {
       
       {/* --- LOCK SCREEN (COVER DEPAN) --- */}
       <div 
-        className={`fixed inset-0 z-[100] bg-gray-900 transition-transform duration-1000 ease-[cubic-bezier(0.77,0,0.175,1)] flex flex-col items-center justify-center text-center px-6
+        className={`fixed inset-0 z-100 bg-gray-900 transition-transform duration-1000 ease-[cubic-bezier(0.77,0,0.175,1)] flex flex-col items-center justify-center text-center px-6
         ${isOpen ? '-translate-y-full' : 'translate-y-0'}`}
       >
         <div className="absolute inset-0 z-0">
@@ -152,7 +161,7 @@ function InvitationContent() {
                 {data.bride_name.split(' ')[0]}
             </h1>
 
-            <div className="mt-12 bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-[2rem] shadow-2xl">
+            <div className="mt-12 bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-4xl shadow-2xl">
                 <p className="text-xs text-gray-300 mb-2">Kepada Yth Bapak/Ibu/Saudara/i</p>
                 <h2 className="text-2xl font-bold mb-6 text-white capitalize">{guestName}</h2>
                 <button 
@@ -176,7 +185,7 @@ function InvitationContent() {
             style={{ backgroundImage: `url("${data.cover_photo}")` }}
           ></div>
           {/* Gradient Overlay Lebih Halus */}
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-gray-900 via-gray-900/50 to-transparent"></div>
           
           {/* Content */}
           <div className="relative z-10 w-full text-center text-white px-6 pb-24 md:pb-32">
@@ -191,7 +200,7 @@ function InvitationContent() {
                   <p className="text-gray-200 text-sm md:text-base italic leading-relaxed opacity-90 font-light">
                       "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya..."
                   </p>
-                  <div className="w-12 h-[1px] bg-pink-500 mx-auto my-4"></div>
+                  <div className="w-12 h-px bg-pink-500 mx-auto my-4"></div>
                   <p className="text-pink-300 text-xs font-bold tracking-widest uppercase">(Ar-Rum: 21)</p>
               </div>
           </div>
@@ -255,12 +264,12 @@ function InvitationContent() {
           </div>
 
           <div className="space-y-6">
-              <div className="p-8 border border-white rounded-[2rem] bg-white shadow-sm text-center">
+              <div className="p-8 border border-white rounded-4xl bg-white shadow-sm text-center">
                   <h3 className={`${playfair.className} text-2xl text-gray-900 mb-2`}>Akad Nikah</h3>
                   <p className="text-sm font-bold text-pink-600 mb-2">08.00 - 10.00 WIB</p>
                   <p className="text-sm text-gray-600">{data.venue}</p>
               </div>
-              <div className="p-8 border border-white rounded-[2rem] bg-white shadow-sm text-center">
+              <div className="p-8 border border-white rounded-4xl bg-white shadow-sm text-center">
                   <h3 className={`${playfair.className} text-2xl text-gray-900 mb-2`}>Resepsi</h3>
                   <p className="text-sm font-bold text-pink-600 mb-2">11.00 - Selesai</p>
                   <p className="text-sm text-gray-600">{data.venue}</p>

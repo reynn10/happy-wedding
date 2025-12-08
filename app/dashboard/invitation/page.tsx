@@ -30,13 +30,16 @@ export default function InvitationPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  
+  // State untuk refresh iframe
+  const [refreshKey, setRefreshKey] = useState(Date.now());
 
   // --- 1. FETCH DATA ---
   useEffect(() => {
     const fetchData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setIsLoading(false); return; }
-      setUserId(user.id);
+      setUserId(user.id); // SIMPAN USER ID
 
       const { data: invData } = await supabase
         .from('invitations')
@@ -57,13 +60,14 @@ export default function InvitationPage() {
             story: invData.story || "",
             music: invData.music || "Beautiful in White"
         });
+        setRefreshKey(Date.now());
       }
       setIsLoading(false);
     };
     fetchData();
   }, []);
 
-  // --- 2. GENERATE LIVE PREVIEW URL ---
+  // --- 2. GENERATE LIVE PREVIEW URL (FIXED) ---
   const getPreviewUrl = () => {
     const params = new URLSearchParams();
     params.set('groom', data.groomName);
@@ -71,7 +75,10 @@ export default function InvitationPage() {
     params.set('date', data.date);
     params.set('venue', data.venue);
     params.set('cover', data.coverPhoto);
-    return `/invitation/demo?${params.toString()}`;
+    // PENTING: Kirim userId agar halaman demo tau rekening siapa yang harus diambil
+    if (userId) params.set('uid', userId); 
+    
+    return `/invitation/demo?${params.toString()}&t=${refreshKey}`;
   };
 
   // --- 3. UPLOAD IMAGE ---
@@ -131,6 +138,7 @@ export default function InvitationPage() {
     
     setIsSaving(false);
     setActiveMenu(null);
+    setRefreshKey(Date.now()); // Refresh iframe
     alert("Berhasil disimpan!");
   };
 
@@ -163,6 +171,7 @@ export default function InvitationPage() {
         </div>
 
         <div className="space-y-6 overflow-y-auto custom-scrollbar pr-2 pb-4">
+            
             {activeMenu === 'mempelai' && (
                 <>
                     <div className="space-y-2">
@@ -188,7 +197,7 @@ export default function InvitationPage() {
                     </div>
                     <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Link Google Maps</label>
-                        <input type="text" name="mapUrl" placeholder="https://maps.app.goo.gl/..." value={data.mapUrl} onChange={handleInputChange} suppressHydrationWarning={true} className="w-full p-4 bg-stone-50 rounded-2xl border border-stone-100 outline-none focus:ring-2 focus:ring-blue-200 transition text-gray-900 font-medium text-sm text-blue-600 underline" />
+                        <input type="text" name="mapUrl" placeholder="https://maps.app.goo.gl/..." value={data.mapUrl} onChange={handleInputChange} suppressHydrationWarning={true} className="w-full p-4 bg-stone-50 rounded-2xl border border-stone-100 outline-none focus:ring-2 focus:ring-blue-200 transition font-medium text-sm text-blue-600 underline" />
                         <p className="text-[10px] text-gray-400">Copy link dari Google Maps (Share - Copy Link).</p>
                     </div>
                 </>
@@ -234,37 +243,31 @@ export default function InvitationPage() {
   return (
     <div className="space-y-8 animate-fade-in-up font-sans text-gray-800">
       
-      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div><p className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase mb-2">Project Management</p><h1 className="text-4xl font-serif font-bold text-gray-900">My Invitation</h1></div>
           <div className="flex gap-3"><button onClick={handlePreview} suppressHydrationWarning={true} className="px-6 py-3 bg-white border border-gray-200 text-gray-700 rounded-full text-sm font-bold hover:border-pink-500 hover:text-pink-600 transition shadow-sm">Lihat Live</button><button onClick={handleShare} suppressHydrationWarning={true} className="px-6 py-3 bg-gray-900 text-white rounded-full text-sm font-bold hover:bg-gray-800 transition shadow-lg flex items-center gap-2"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>Bagikan Link</button></div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* --- KOLOM KIRI: PREVIEW HP (LIVE IFRAME) --- */}
+          
           <div className="lg:col-span-1 sticky top-8">
               <div className="bg-white rounded-[3rem] p-4 shadow-sm border border-gray-100 flex justify-center items-center relative overflow-hidden group">
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-                  
-                  {/* Mockup HP */}
-                  <div className="relative w-[280px] h-[580px] bg-gray-900 rounded-[2.5rem] border-[8px] border-gray-800 shadow-2xl overflow-hidden">
-                      
-                      {/* FIX: Scrolling="no" untuk menyembunyikan scrollbar iframe */}
+                  <div className="relative w-[280px] h-[580px] bg-gray-900 rounded-[2.5rem] border-8 border-gray-800 shadow-2xl overflow-hidden">
+                      {/* FIX: Iframe URL menerima 'uid' untuk fetch data spesifik di halaman demo */}
                       <iframe 
                         src={getPreviewUrl()}
                         className="w-full h-full bg-white [&::-webkit-scrollbar]:hidden"
-                        style={{ border: 'none' }}
+                        style={{ border: 'none', overflow: 'hidden' }}
                         title="Live Preview"
                         scrolling="no" 
                       />
-                      
                   </div>
               </div>
           </div>
 
-          {/* --- KOLOM KANAN: MENU EDIT --- */}
           <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex items-center justify-between">
+              <div className="bg-white p-6 rounded-4xl border border-gray-100 shadow-sm flex items-center justify-between">
                   <div className="flex items-center gap-4"><div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/></svg></div><div><h3 className="font-bold text-gray-900">Status Undangan: Aktif</h3><p className="text-xs text-gray-500">Masa aktif selamanya (Lifetime)</p></div></div>
               </div>
               {activeMenu ? renderEditor() : (<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-fade-in-up">{menuItems.map((item) => (<button key={item.id} onClick={() => setActiveMenu(item.id)} suppressHydrationWarning={true} className={`group relative bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 hover:shadow-xl ${item.borderColor} transition-all duration-500 overflow-hidden h-40 flex flex-col justify-end text-left`}><div className={`absolute -bottom-4 -right-4 opacity-10 rotate-12 group-hover:rotate-0 group-hover:opacity-40 group-hover:scale-110 transition-all duration-500 ease-out ${item.watermarkColor}`}>{item.icon}</div><div className="relative z-10"><p className={`font-bold text-[10px] uppercase tracking-[0.2em] mb-1 ${item.subTextColor}`}>{item.desc}</p><h4 className={`font-serif font-bold text-3xl text-gray-900 ${item.textColor} transition-colors tracking-tight`}>{item.title}</h4></div></button>))}</div>)}
