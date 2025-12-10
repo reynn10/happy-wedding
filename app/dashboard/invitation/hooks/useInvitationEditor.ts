@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabaseClient';
 const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1170&auto=format&fit=crop";
 
 export const useInvitationEditor = () => {
+  // --- STATE DATA (FLAT STRUCTURE) ---
   const [data, setData] = useState({
     id: 0,
     brideName: "Juliet Putri",
@@ -15,8 +16,16 @@ export const useInvitationEditor = () => {
     mapUrl: "", 
     themeColor: "Pink",
     coverPhoto: DEFAULT_IMAGE,
-    story: "Kami bertemu pertama kali di...",
-    music: "Beautiful in White - Shane Filan"
+    music: "Beautiful in White - Shane Filan",
+    
+    // DATA LOVE JOURNEY (Ditambahkan)
+    storyMetDate: "Januari 2020",
+    storyMetDesc: "Kami bertemu pertama kali di...",
+    storyFirstDateDate: "Februari 2020",
+    storyFirstDateDesc: "Kencan pertama kami...",
+    storyProposalDate: "Desember 2024",
+    storyProposalDesc: "Dia melamar...",
+    storyTheDayDesc: "Hari bahagia kami..."
   });
 
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -26,7 +35,7 @@ export const useInvitationEditor = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(Date.now());
 
-  // Fetch data dari Supabase
+  // --- 1. FETCH DATA ---
   useEffect(() => {
     const fetchData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -40,6 +49,9 @@ export const useInvitationEditor = () => {
         .single();
 
       if (invData) {
+        // UNPACK JSON STORY
+        const storyDB = invData.story || {};
+
         setData({
             id: invData.id,
             brideName: invData.bride_name || "Juliet Putri",
@@ -49,8 +61,16 @@ export const useInvitationEditor = () => {
             mapUrl: invData.map_url || "",
             themeColor: invData.theme_color || "Pink",
             coverPhoto: invData.cover_photo || DEFAULT_IMAGE,
-            story: invData.story || "",
-            music: invData.music || "Beautiful in White"
+            music: invData.music || "Beautiful in White - Shane Filan",
+            
+            // Mapping Story JSON ke State Flat
+            storyMetDate: storyDB.met?.date || "Januari 2020",
+            storyMetDesc: storyDB.met?.desc || "Kami bertemu pertama kali...",
+            storyFirstDateDate: storyDB.date?.date || "Februari 2020",
+            storyFirstDateDesc: storyDB.date?.desc || "Kencan pertama kami...",
+            storyProposalDate: storyDB.proposal?.date || "Desember 2024",
+            storyProposalDesc: storyDB.proposal?.desc || "Dia melamar...",
+            storyTheDayDesc: storyDB.theDay?.desc || "Hari bahagia kami..."
         });
         setRefreshKey(Date.now());
       }
@@ -59,7 +79,7 @@ export const useInvitationEditor = () => {
     fetchData();
   }, []);
 
-  // Generate preview URL
+  // --- 2. PREVIEW URL ---
   const getPreviewUrl = () => {
     const params = new URLSearchParams();
     params.set('groom', data.groomName);
@@ -68,11 +88,21 @@ export const useInvitationEditor = () => {
     params.set('venue', data.venue);
     params.set('cover', data.coverPhoto);
     if (userId) params.set('uid', userId); 
+    
+    // Kirim Data Story via URL untuk Live Preview
+    params.set('storyMetDate', data.storyMetDate);
+    params.set('storyMetDesc', data.storyMetDesc);
+    params.set('storyFirstDateDate', data.storyFirstDateDate);
+    params.set('storyFirstDateDesc', data.storyFirstDateDesc);
+    params.set('storyProposalDate', data.storyProposalDate);
+    params.set('storyProposalDesc', data.storyProposalDesc);
+    params.set('storyTheDayDesc', data.storyTheDayDesc);
+
     params.set('hideScroll', '1');
     return `/invitation/demo?${params.toString()}&t=${refreshKey}`;
   };
 
-  // Upload image handler
+  // --- 3. UPLOAD IMAGE ---
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     
@@ -102,10 +132,18 @@ export const useInvitationEditor = () => {
     setIsUploading(false);
   };
 
-  // Save data handler
+  // --- 4. SAVE DATA ---
   const handleSave = async () => {
     if (!userId) return;
     setIsSaving(true);
+
+    // PACKING JSON STORY
+    const storyJson = {
+        met: { date: data.storyMetDate, desc: data.storyMetDesc },
+        date: { date: data.storyFirstDateDate, desc: data.storyFirstDateDesc },
+        proposal: { date: data.storyProposalDate, desc: data.storyProposalDesc },
+        theDay: { desc: data.storyTheDayDesc }
+    };
 
     const payload = {
         user_id: userId,
@@ -116,8 +154,8 @@ export const useInvitationEditor = () => {
         map_url: data.mapUrl,
         theme_color: data.themeColor,
         cover_photo: data.coverPhoto,
-        story: data.story,
-        music: data.music
+        music: data.music,
+        story: storyJson // Simpan sebagai JSON
     };
 
     if (data.id === 0) {
@@ -133,27 +171,22 @@ export const useInvitationEditor = () => {
     alert("Berhasil disimpan!");
   };
 
-  // Input change handler
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Theme change handler
   const handleThemeChange = (color: string) => { 
     setData(prev => ({ ...prev, themeColor: color })); 
   };
 
   return {
     data,
-    setData,
     activeMenu,
     setActiveMenu,
     isLoading,
     isSaving,
     isUploading,
-    userId,
-    refreshKey,
     getPreviewUrl,
     handleImageUpload,
     handleSave,
