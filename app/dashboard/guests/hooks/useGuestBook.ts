@@ -43,7 +43,6 @@ export const useGuestBook = () => {
 
   const getWaLink = (guest: Guest) => {
     const phone = formatPhone(guest.phone);
-    // Ganti domain dengan domain asli Anda saat deploy
     const invitationLink = `https://happywedding.com/invitation/demo?to=${encodeURIComponent(guest.name)}`;
     const message = `Kepada Yth. ${guest.name},%0A%0ATanpa mengurangi rasa hormat, kami bermaksud mengundang Bapak/Ibu/Saudara/i pada acara pernikahan kami.%0A%0ABerikut link undangan kami:%0A${invitationLink}%0A%0AMerupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.%0A%0ATerima kasih.`;
     return `https://wa.me/${phone}?text=${message}`;
@@ -52,16 +51,14 @@ export const useGuestBook = () => {
   // --- ACTIONS ---
   const handleImportContacts = async () => {
     if (!('contacts' in navigator && 'ContactsManager' in window)) {
-      alert("Fitur Impor Kontak hanya didukung di browser HP (Chrome/Safari Mobile).");
+      alert("Fitur ini khusus browser HP (Chrome/Safari Mobile).");
       return;
     }
-
     try {
       const props = ['name', 'tel'];
       const opts = { multiple: true };
       // @ts-ignore
       const contacts = await navigator.contacts.select(props, opts);
-      
       if (contacts.length > 0 && userId) {
         const newGuests = contacts.map((c: any) => ({
           user_id: userId,
@@ -71,34 +68,24 @@ export const useGuestBook = () => {
           status: "Pending",
           pax: 1
         }));
-
         const { error } = await supabase.from('guests').insert(newGuests);
-        if (error) {
-          alert("Gagal mengimpor kontak: " + error.message);
-        } else {
-          alert(`Berhasil mengimpor ${contacts.length} kontak!`);
-          fetchGuests();
+        if (!error) {
+            alert(`Berhasil mengimpor ${contacts.length} kontak!`);
+            fetchGuests();
         }
       }
-    } catch (ex) {
-      console.error(ex);
-    }
+    } catch (ex) { console.error(ex); }
   };
 
   const handleSendWA = (guest: Guest) => {
-    if (!guest.phone) {
-        alert("Nomor HP tamu ini belum diisi.");
-        return;
-    }
+    if (!guest.phone) { alert("Nomor HP kosong."); return; }
     window.open(getWaLink(guest), '_blank');
   };
 
   const handleBulkSend = () => {
     if (selectedIds.length === 0) return;
     const selectedGuests = guests.filter(g => selectedIds.includes(g.id));
-    const confirmMsg = `Kirim ke ${selectedGuests.length} tamu? Tab WhatsApp akan terbuka satu per satu.`;
-    
-    if (confirm(confirmMsg)) {
+    if (confirm(`Kirim ke ${selectedGuests.length} tamu? Tab WhatsApp akan terbuka satu per satu.`)) {
        selectedGuests.forEach((guest) => {
           if(guest.phone) window.open(getWaLink(guest), '_blank');
        });
@@ -111,16 +98,8 @@ export const useGuestBook = () => {
     const newName = prompt("Masukkan Nama Tamu:");
     if (!newName) return;
     const newPhone = prompt("Masukkan Nomor WA (08xx):");
-
     if (userId) {
-        const newGuest = {
-            user_id: userId,
-            name: newName,
-            phone: newPhone || "", 
-            category: "Umum",
-            status: "Pending",
-            pax: 1
-        };
+        const newGuest = { user_id: userId, name: newName, phone: newPhone || "", category: "Umum", status: "Pending", pax: 1 };
         const { error } = await supabase.from('guests').insert([newGuest]);
         if (!error) fetchGuests();
     }
@@ -136,7 +115,6 @@ export const useGuestBook = () => {
   const handleEdit = (guest: Guest) => {
      const newName = prompt("Edit Nama:", guest.name);
      const newPhone = prompt("Edit No WA:", guest.phone);
-     
      if (newName && userId) {
          setGuests(guests.map(g => g.id === guest.id ? { ...g, name: newName, phone: newPhone || "" } : g));
          supabase.from('guests').update({ name: newName, phone: newPhone }).eq('id', guest.id).then();
@@ -153,7 +131,6 @@ export const useGuestBook = () => {
     else setSelectedIds([...selectedIds, id]);
   };
 
-  // Stats
   const stats = {
     total: guests.length,
     confirmed: guests.filter(g => g.status === 'Hadir').length,
@@ -162,18 +139,8 @@ export const useGuestBook = () => {
   };
 
   return {
-    guests,
-    isLoading,
-    selectedIds,
-    stats,
-    handleImportContacts,
-    handleSendWA,
-    handleBulkSend,
-    handleExport,
-    handleAddGuest,
-    handleDelete,
-    handleEdit,
-    toggleSelectAll,
-    toggleSelect
+    guests, isLoading, selectedIds, stats,
+    handleImportContacts, handleSendWA, handleBulkSend, handleExport,
+    handleAddGuest, handleDelete, handleEdit, toggleSelectAll, toggleSelect
   };
 };
