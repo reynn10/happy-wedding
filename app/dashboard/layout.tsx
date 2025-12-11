@@ -13,28 +13,25 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // Default false agar tidak menghalangi layar saat pertama load di HP
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   // State untuk User
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // --- CEK LOGIN & AMBIL USER (DIPERBAIKI) ---
+  // --- CEK LOGIN & AMBIL USER ---
   useEffect(() => {
     const checkAuth = async () => {
-      // 1. Cek sesi saat ini
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        // Jika tidak ada sesi, lempar ke login
         router.replace('/login');
       } else {
         setUser(session.user);
         setLoading(false);
       }
 
-      // 2. Pasang pendengar (Listener) untuk memantau perubahan status login
-      // Ini penting agar jika token expired atau user logout, UI langsung bereaksi
       const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT' || !session) {
           router.replace('/login');
@@ -56,7 +53,6 @@ export default function DashboardLayout({
   // --- FUNGSI LOGOUT ---
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    // Router replace akan ditangani oleh onAuthStateChange di atas
   };
 
   // Menu Items
@@ -72,15 +68,32 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-stone-50 flex font-sans text-gray-800">
       
+      {/* --- OVERLAY BACKDROP (MOBILE ONLY) --- */}
+      {/* Menutup sidebar saat area gelap diklik */}
+      {isSidebarOpen && (
+        <div 
+          onClick={() => setIsSidebarOpen(false)}
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden backdrop-blur-sm transition-opacity"
+        />
+      )}
+
       {/* --- SIDEBAR --- */}
-      <aside className={`fixed top-0 left-0 z-40 h-screen transition-transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 bg-white border-r border-gray-100 w-64 shadow-sm flex flex-col justify-between`}>
+      <aside 
+        className={`fixed top-0 left-0 z-40 h-screen transition-transform duration-300 ease-in-out
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+          lg:translate-x-0 bg-white border-r border-gray-100 w-64 shadow-xl lg:shadow-sm flex flex-col justify-between`}
+      >
         
         <div>
             {/* Logo Area */}
-            <div className="h-20 flex items-center px-8 border-b border-gray-50">
+            <div className="h-20 flex items-center justify-between px-8 border-b border-gray-50">
                 <Link href="/" className="text-xl font-bold font-serif text-gray-900 tracking-tight">
                     Happy<span className="text-pink-600">.</span>
                 </Link>
+                {/* Tombol Close di Mobile */}
+                <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-gray-600">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
             </div>
 
             {/* Menu List */}
@@ -92,6 +105,8 @@ export default function DashboardLayout({
                         <Link 
                             key={menu.name} 
                             href={menu.href}
+                            // FIX: Tutup sidebar saat menu diklik (Mobile UX)
+                            onClick={() => setIsSidebarOpen(false)}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300
                                 ${isActive 
                                     ? 'bg-pink-50 text-pink-700' 
@@ -110,8 +125,7 @@ export default function DashboardLayout({
         {/* User Profile & Logout (Bottom) */}
         <div className="p-4 border-t border-gray-50">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 mb-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 relative bg-gray-200">
-                     {/* Tampilkan Avatar jika ada, atau inisial jika tidak */}
+                <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 relative bg-gray-200 shrink-0">
                      {user?.user_metadata?.avatar_url ? (
                         <Image src={user.user_metadata.avatar_url} fill alt="User" className="object-cover"/>
                      ) : (
@@ -121,7 +135,6 @@ export default function DashboardLayout({
                      )}
                 </div>
                 <div className="flex-1 min-w-0">
-                    {/* Tampilkan Nama atau Email */}
                     <p className="text-sm font-bold text-gray-900 truncate">
                         {user?.user_metadata?.full_name || "Pengantin Baru"}
                     </p>
@@ -129,7 +142,6 @@ export default function DashboardLayout({
                 </div>
             </div>
 
-            {/* Tombol Logout */}
             <button 
                 onClick={handleLogout}
                 className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gray-200 text-gray-500 text-xs font-bold hover:bg-red-50 hover:text-red-600 hover:border-red-100 transition-colors"
@@ -142,11 +154,14 @@ export default function DashboardLayout({
       </aside>
 
       {/* --- MAIN CONTENT AREA --- */}
-      <div className="flex-1 lg:ml-64">
+      <div className="flex-1 lg:ml-64 min-w-0">
         {/* Mobile Header Toggle */}
-        <div className="lg:hidden h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 sticky top-0 z-30">
+        <div className="lg:hidden h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
             <span className="font-serif font-bold text-lg">Happy Wedding</span>
-            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-gray-500">
+            <button 
+              onClick={() => setIsSidebarOpen(true)} 
+              className="text-gray-500 p-2 hover:bg-gray-100 rounded-lg transition"
+            >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
             </button>
         </div>

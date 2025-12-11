@@ -37,7 +37,7 @@ export default function GuestModal({ isOpen, onClose, onSave, editingGuest, isSa
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white rounded-[2rem] p-8 w-full max-w-md shadow-2xl scale-100 animate-zoom-in">
+      <div className="bg-white rounded-4xl p-8 w-full max-w-md shadow-2xl scale-100 animate-zoom-in">
         <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">
           {editingGuest ? 'Edit Tamu' : 'Tambah Tamu Baru'}
         </h3>
