@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { toast } from 'sonner'; // Import Toast
 
 const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1170&auto=format&fit=crop";
 
 export const useInvitationEditor = () => {
-  // --- STATE DATA (FLAT STRUCTURE) ---
   const [data, setData] = useState({
     id: 0,
     brideName: "Juliet Putri",
@@ -18,7 +18,7 @@ export const useInvitationEditor = () => {
     coverPhoto: DEFAULT_IMAGE,
     music: "Beautiful in White - Shane Filan",
     
-    // DATA LOVE JOURNEY (Ditambahkan)
+    // DATA LOVE JOURNEY
     storyMetDate: "Januari 2020",
     storyMetDesc: "Kami bertemu pertama kali di...",
     storyFirstDateDate: "Februari 2020",
@@ -49,7 +49,6 @@ export const useInvitationEditor = () => {
         .single();
 
       if (invData) {
-        // UNPACK JSON STORY
         const storyDB = invData.story || {};
 
         setData({
@@ -63,7 +62,6 @@ export const useInvitationEditor = () => {
             coverPhoto: invData.cover_photo || DEFAULT_IMAGE,
             music: invData.music || "Beautiful in White - Shane Filan",
             
-            // Mapping Story JSON ke State Flat
             storyMetDate: storyDB.met?.date || "Januari 2020",
             storyMetDesc: storyDB.met?.desc || "Kami bertemu pertama kali...",
             storyFirstDateDate: storyDB.date?.date || "Februari 2020",
@@ -89,7 +87,6 @@ export const useInvitationEditor = () => {
     params.set('cover', data.coverPhoto);
     if (userId) params.set('uid', userId); 
     
-    // Kirim Data Story via URL untuk Live Preview
     params.set('storyMetDate', data.storyMetDate);
     params.set('storyMetDesc', data.storyMetDesc);
     params.set('storyFirstDateDate', data.storyFirstDateDate);
@@ -105,39 +102,40 @@ export const useInvitationEditor = () => {
   // --- 3. UPLOAD IMAGE ---
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    
     const file = e.target.files[0];
     const fileExt = file.name.split('.').pop();
     const fileName = `${userId}-${Date.now()}.${fileExt}`;
-    const filePath = `${fileName}`;
 
     setIsUploading(true);
+    // Tampilkan Loading Toast
+    const toastId = toast.loading("Mengupload foto...");
 
-    const { error: uploadError } = await supabase.storage
-      .from('invitation')
-      .upload(filePath, file, { cacheControl: '3600', upsert: false });
+    const { error: uploadError } = await supabase.storage.from('invitation').upload(fileName, file, { upsert: false });
 
-    if (uploadError) {
-      alert("Gagal upload: " + uploadError.message);
-      setIsUploading(false);
-      return;
+    if (uploadError) { 
+        toast.dismiss(toastId);
+        toast.error("Gagal upload: " + uploadError.message); 
+        setIsUploading(false); 
+        return; 
     }
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('invitation')
-      .getPublicUrl(filePath);
-
+    const { data: { publicUrl } } = supabase.storage.from('invitation').getPublicUrl(fileName);
     const freshUrl = `${publicUrl}?t=${Date.now()}`;
     setData(prev => ({ ...prev, coverPhoto: freshUrl }));
+    
     setIsUploading(false);
+    toast.dismiss(toastId);
+    toast.success("Foto berhasil diupload!");
   };
 
   // --- 4. SAVE DATA ---
   const handleSave = async () => {
     if (!userId) return;
     setIsSaving(true);
+    
+    // Tampilkan Loading Toast
+    const toastId = toast.loading("Menyimpan perubahan...");
 
-    // PACKING JSON STORY
     const storyJson = {
         met: { date: data.storyMetDate, desc: data.storyMetDesc },
         date: { date: data.storyFirstDateDate, desc: data.storyFirstDateDesc },
@@ -155,20 +153,32 @@ export const useInvitationEditor = () => {
         theme_color: data.themeColor,
         cover_photo: data.coverPhoto,
         music: data.music,
-        story: storyJson // Simpan sebagai JSON
+        story: storyJson 
     };
 
+    let error;
     if (data.id === 0) {
-        const { data: newData } = await supabase.from('invitations').insert([payload]).select().single();
+        const { data: newData, error: insertError } = await supabase.from('invitations').insert([payload]).select().single();
         if (newData) setData(prev => ({ ...prev, id: newData.id }));
+        error = insertError;
     } else {
-        await supabase.from('invitations').update(payload).eq('id', data.id);
+        const { error: updateError } = await supabase.from('invitations').update(payload).eq('id', data.id);
+        error = updateError;
     }
     
     setIsSaving(false);
-    setActiveMenu(null);
-    setRefreshKey(Date.now());
-    alert("Berhasil disimpan!");
+    toast.dismiss(toastId); 
+
+    if (error) {
+       toast.error("Gagal menyimpan data!");
+       console.error(error);
+    } else {
+       setActiveMenu(null);
+       setRefreshKey(Date.now());
+       toast.success("Undangan berhasil disimpan!", {
+         description: "Perubahan sudah live di halaman demo."
+       });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
