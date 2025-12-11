@@ -53,7 +53,7 @@ export default function Home() {
         {/* CTA Akhir */}
         <section className="py-32 px-6 relative" data-aos="zoom-in">
             <div className="relative max-w-5xl mx-auto">
-                <div className="bg-linear-to-r from-pink-600 to-rose-700 rounded-[3rem] p-12 md:p-20 text-center shadow-2xl relative overflow-hidden">
+                <div className="bg-pink-600 rounded-[3rem] p-12 md:p-20 text-center shadow-2xl relative overflow-hidden">
                     <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')]"></div>
                     <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full blur-[80px]"></div>
                     <div className="absolute bottom-0 right-0 w-64 h-64 bg-pink-400 opacity-20 rounded-full blur-[80px]"></div>
