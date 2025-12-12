@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import { Toaster } from 'sonner'; // 1. Import Toaster
+import { Toaster } from 'sonner';
 import "./globals.css";
 import UseScrollEffects from "../components/UseScrollEffects";
 
@@ -25,11 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className="scroll-smooth">
+      {/* FIX: Tambahkan suppressHydrationWarning={true} 
+        Ini mencegah error saat ekstensi browser (seperti McAfee/LastPass) 
+        menyuntikkan kode ke dalam body.
+      */}
       <body 
+        suppressHydrationWarning={true}
         className={`${inter.variable} ${playfair.variable} font-sans antialiased overflow-x-hidden bg-[#fafaf9] min-h-screen`}
       >
-        {/* 2. Pasang Toaster di sini */}
-        {/* richColors membuat warna notifikasi lebih hidup (Hijau/Merah) */}
         <Toaster position="top-center" richColors closeButton />
         
         <UseScrollEffects />

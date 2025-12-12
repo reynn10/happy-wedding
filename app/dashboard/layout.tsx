@@ -13,10 +13,7 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  // Default false agar tidak menghalangi layar saat pertama load di HP
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
-  // State untuk User
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -50,12 +47,10 @@ export default function DashboardLayout({
     checkAuth();
   }, [router]);
 
-  // --- FUNGSI LOGOUT ---
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
 
-  // Menu Items
   const menus = [
     { name: 'Overview', href: '/dashboard', icon: (active: boolean) => <svg className={`w-5 h-5 ${active ? 'text-pink-600' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg> },
     { name: 'My Invitation', href: '/dashboard/invitation', icon: (active: boolean) => <svg className={`w-5 h-5 ${active ? 'text-pink-600' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg> },
@@ -63,13 +58,24 @@ export default function DashboardLayout({
     { name: 'Gifts & Angpao', href: '/dashboard/gifts', icon: (active: boolean) => <svg className={`w-5 h-5 ${active ? 'text-pink-600' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
   ];
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-stone-50 text-gray-400">Memuat Dashboard...</div>;
+  // FIX: Tambahkan suppressHydrationWarning pada loading state
+  if (loading) return (
+    <div 
+      className="min-h-screen flex items-center justify-center bg-stone-50 text-gray-400"
+      suppressHydrationWarning={true}
+    >
+      Memuat Dashboard...
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-stone-50 flex font-sans text-gray-800">
+    // FIX: Tambahkan suppressHydrationWarning pada main wrapper
+    <div 
+      className="min-h-screen bg-stone-50 flex font-sans text-gray-800 overflow-x-hidden"
+      suppressHydrationWarning={true}
+    >
       
-      {/* --- OVERLAY BACKDROP (MOBILE ONLY) --- */}
-      {/* Menutup sidebar saat area gelap diklik */}
+      {/* --- OVERLAY BACKDROP --- */}
       {isSidebarOpen && (
         <div 
           onClick={() => setIsSidebarOpen(false)}
@@ -90,7 +96,7 @@ export default function DashboardLayout({
                 <Link href="/" className="text-xl font-bold font-serif text-gray-900 tracking-tight">
                     Happy<span className="text-pink-600">.</span>
                 </Link>
-                {/* Tombol Close di Mobile */}
+                {/* Tombol Close Mobile */}
                 <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-gray-600">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
@@ -105,7 +111,6 @@ export default function DashboardLayout({
                         <Link 
                             key={menu.name} 
                             href={menu.href}
-                            // FIX: Tutup sidebar saat menu diklik (Mobile UX)
                             onClick={() => setIsSidebarOpen(false)}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300
                                 ${isActive 
@@ -122,7 +127,7 @@ export default function DashboardLayout({
             </nav>
         </div>
 
-        {/* User Profile & Logout (Bottom) */}
+        {/* User Profile & Logout */}
         <div className="p-4 border-t border-gray-50">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 mb-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 relative bg-gray-200 shrink-0">
@@ -154,7 +159,7 @@ export default function DashboardLayout({
       </aside>
 
       {/* --- MAIN CONTENT AREA --- */}
-      <div className="flex-1 lg:ml-64 min-w-0">
+      <div className="flex-1 lg:ml-64 min-w-0 overflow-x-hidden">
         {/* Mobile Header Toggle */}
         <div className="lg:hidden h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
             <span className="font-serif font-bold text-lg">Happy Wedding</span>
@@ -166,7 +171,6 @@ export default function DashboardLayout({
             </button>
         </div>
 
-        {/* Content Injection */}
         <div className="p-6 md:p-10 max-w-7xl mx-auto">
             {children}
         </div>
