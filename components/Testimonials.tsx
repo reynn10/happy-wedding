@@ -9,8 +9,8 @@ const reviews = [
     date: "December 12, 2024",
     location: "Plataran Menteng",
     text: "Desainnya benar-benar merepresentasikan 'Dream Wedding' kami. Fitur RSVP sangat membantu mengelola tamu VIP. Worth every penny!",
-    weddingPhoto: "https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=800&auto=format&fit=crop",
-    avatar: "https://images.unsplash.com/photo-1623091411315-266390560623?w=150&h=150&fit=crop&q=80",
+    weddingPhoto: "https://images.unsplash.com/photo-1629222311300-8728602b6dc4?q=80&w=800&auto=format&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1627364155535-9ed50e63aece?w=150&h=150&fit=crop&q=80",
     rating: 5
   },
   {
@@ -18,8 +18,8 @@ const reviews = [
     date: "February 14, 2025",
     location: "The Ritz-Carlton",
     text: "Simpel, Elegan, dan Cepat. Tamu-tamu kami bilang undangannya sangat aesthetic dan mudah dibuka di HP.",
-    weddingPhoto: "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=800&auto=format&fit=crop",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&q=80",
+    weddingPhoto: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?q=80&w=800&auto=format&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1708295848969-b1bd2145e647?w=150&h=150&fit=crop&q=80",
     rating: 5
   },
   {
@@ -27,8 +27,8 @@ const reviews = [
     date: "March 20, 2025",
     location: "Glass House Bogor",
     text: "Suka banget sama tema 'Dark Floral'-nya. Terasa sangat premium. Adminnya juga ramah banget bantuin setup data awal.",
-    weddingPhoto: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&q=80",
+    weddingPhoto: "https://images.unsplash.com/photo-1649183424680-464747a8e43d?q=80&w=800&auto=format&fit=crop",
+    avatar: "https://images.unsplash.com/photo-1638763757006-94414ab2ccf2?w=150&h=150&fit=crop&q=80",
     rating: 5
   },
   {
@@ -36,7 +36,7 @@ const reviews = [
     date: "April 05, 2025",
     location: "Balai Kartini",
     text: "Fitur angpao digitalnya sangat berguna. Desainnya modern dan tidak norak. Sangat merekomendasikan Happy Wedding!",
-    weddingPhoto: "https://images.unsplash.com/photo-1522673607200-1645062cd958?q=80&w=800&auto=format&fit=crop",
+    weddingPhoto: "https://images.unsplash.com/photo-1481653125770-b78c206c59d4?q=80&w=800&auto=format&fit=crop",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&q=80",
     rating: 5
   }
