@@ -61,16 +61,15 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-24 bg-transparent relative overflow-hidden">
+    <section className="py-15 bg-transparent relative overflow-hidden">
       
-      {/* Dekorasi Background Halus */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-rose-100/30 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* HEADER */}
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 leading-tight">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 leading-tight">
             Cerita Cinta <span className="text-pink-600 italic">Mereka</span>
           </h2>
           <p className="text-gray-500 mt-4 max-w-lg mx-auto text-sm md:text-base font-light">
@@ -93,7 +92,7 @@ export default function Testimonials() {
               
               {/* 1. Foto Pernikahan */}
               <div className="p-3 pb-0">
-                <div className="relative h-96 w-full overflow-hidden rounded-4xl">
+                <div className="relative -64 md:h-96 w-full overflow-hidden rounded-4xl">
                     <Image 
                     src={review.weddingPhoto} 
                     alt={`${review.name} Wedding`}

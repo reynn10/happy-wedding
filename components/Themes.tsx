@@ -28,7 +28,6 @@ export default function Themes() {
   }, [isPaused]);
 
   return (
-    // FIX: bg-transparent (Blobs sudah ada di Parent)
     <section id="tema" className="py-15 bg-transparent relative">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
@@ -47,7 +46,7 @@ export default function Themes() {
               </button>
           </Link>
         </div>
-        <div className="flex flex-row gap-2 md:gap-4 h-[500px] w-full" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+        <div className="flex flex-row gap-2 md:gap-4 h-[480px] w-full" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
           {themeList.map((theme) => {
             const isActive = activeId === theme.id;
             return (

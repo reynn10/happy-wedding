@@ -66,8 +66,7 @@ const features = [
 
 export default function Features() {
   return (
-    // FIX: bg-transparent agar background utama dari page.tsx terlihat
-    <section id="fitur" className="py-24 bg-transparent relative overflow-hidden">
+    <section id="fitur" className="py-15 bg-transparent relative overflow-hidden">
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         
