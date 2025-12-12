@@ -47,7 +47,6 @@ export default function Testimonials() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Geser 1 per 1 agar di HP setiap kartu terlihat bergantian
       setCurrentIndex((prevIndex) => (prevIndex + 1) % reviews.length);
     }, 5000); 
 
@@ -70,7 +69,7 @@ export default function Testimonials() {
         {/* HEADER */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 leading-tight">
-            Cerita Cinta <span className="text-pink-600 italic">Mereka</span>
+            Cerita Cinta Mereka
           </h2>
           <p className="text-gray-500 mt-4 max-w-lg mx-auto text-sm md:text-base font-light">
             Momen bahagia dari pasangan yang telah mewujudkan pernikahan impian mereka bersama kami.
@@ -92,7 +91,7 @@ export default function Testimonials() {
               
               {/* 1. Foto Pernikahan */}
               <div className="p-3 pb-0">
-                <div className="relative -64 md:h-96 w-full overflow-hidden rounded-4xl">
+                <div className="relative h-64 md:h-96 w-full overflow-hidden rounded-4xl">
                     <Image 
                     src={review.weddingPhoto} 
                     alt={`${review.name} Wedding`}

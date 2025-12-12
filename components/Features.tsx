@@ -92,7 +92,6 @@ export default function Features() {
             >
               
               {/* --- GLOSSY HIGHLIGHT (KILAP KACA) --- */}
-              {/* Gradasi putih transparan dari pojok kiri atas */}
               <div className="absolute inset-0 bg-linear-to-b from-white/60 to-transparent opacity-60 pointer-events-none"></div>
 
               {/* LIQUID HOVER EFFECT (Tint Warna Pink Halus) */}
