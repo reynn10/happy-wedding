@@ -6,6 +6,7 @@ import Pricing from "../components/Pricing";
 import Testimonials from "../components/Testimonials";
 import FAQ from "../components/FAQ";
 import Footer from "../components/Footer";
+import CTA from "../components/CTA";
 import Link from "next/link";
 
 export default function Home() {
@@ -48,38 +49,15 @@ export default function Home() {
         
         <div data-aos="fade-up">
           <FAQ />
+        </div> 
+        <div data-aos="fade-up">
+          <FAQ />
+        </div> 
+        <div>
+          <CTA />
         </div>
-
-        {/* CTA Akhir */}
-        <section className="py-32 px-6 relative" data-aos="zoom-in">
-            <div className="relative max-w-5xl mx-auto">
-                <div className="bg-pink-600 rounded-[3rem] p-12 md:p-20 text-center shadow-2xl relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')]"></div>
-                    <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full blur-[80px]"></div>
-                    <div className="absolute bottom-0 right-0 w-64 h-64 bg-pink-400 opacity-20 rounded-full blur-[80px]"></div>
-
-                    <div className="relative z-10 space-y-8">
-                        <h2 className="text-4xl md:text-6xl font-bold text-white font-serif leading-tight">
-                            Siap Mewujudkan <br/> 
-                            <span className="text-pink-200 italic">Pernikahan Impian?</span>
-                        </h2>
-                        <p className="text-pink-100 text-lg font-light max-w-2xl mx-auto">
-                            Bergabunglah dengan ribuan pasangan bahagia lainnya. Mulai sekarang, gratis selamanya.
-                        </p>
-                        <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                            <Link href="/login" className="bg-white text-pink-600 px-10 py-4 rounded-full font-bold shadow-xl hover:bg-gray-50 hover:scale-105 transition transform">
-                                Buat Undangan Gratis
-                            </Link>
-                            <Link href="/#harga" className="bg-transparent border border-pink-200 text-white px-10 py-4 rounded-full font-bold hover:bg-white/10 transition shadow-sm">
-                                Lihat Harga Paket
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-      </div>
+        
+        </div>
 
       <Footer />
     </main>
