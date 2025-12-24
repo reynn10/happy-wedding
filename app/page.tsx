@@ -50,9 +50,7 @@ export default function Home() {
         <div data-aos="fade-up">
           <FAQ />
         </div> 
-        <div data-aos="fade-up">
-          <FAQ />
-        </div> 
+        
         <div>
           <CTA />
         </div>
