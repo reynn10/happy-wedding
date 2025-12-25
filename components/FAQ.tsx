@@ -21,8 +21,8 @@ export default function FAQ() {
             <div className="lg:col-span-5 text-left lg:sticky lg:top-32">
                 {/* UPDATE: Label Q&A dihapus agar tampilan lebih bersih */}
                 
-                <h2 className="text-5xl md:text-7xl font-serif font-bold text-gray-900 leading-[0.9] mb-6">
-                    Pertanyaan <br/> <span className="italic text-pink-600 font-light">Umum</span>
+                <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 leading-[0.9] mb-6">
+                    Pertanyaan <br/> <span className=" text-pink-600 font-light">Umum</span>
                 </h2>
                 
                 <p className="text-gray-500 text-sm md:text-base leading-relaxed font-light mb-8 max-w-md">
