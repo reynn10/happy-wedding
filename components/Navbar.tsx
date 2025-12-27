@@ -1,106 +1,121 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
-  // Default State:
-  // Jika di Home ('/'), default FALSE (Hilang dulu).
-  // Jika di halaman lain, default TRUE (Muncul dulu).
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
-  
-  const [isVisible, setIsVisible] = useState(!isHomePage); 
-  const lastScrollY = useRef(0);
 
+  // Deteksi scroll untuk efek glassmorphism
   useEffect(() => {
-    // Reset status saat pindah halaman
-    setIsVisible(!isHomePage);
-
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Tentukan batas ambang (Threshold)
-      // Home: Tunggu lewat Hero (tinggi layar - 100px)
-      // Halaman Lain: Langsung aktif setelah scroll dikit (50px)
-      const threshold = isHomePage ? window.innerHeight - 100 : 50;
-
-      // KONDISI 1: MASIH DI POSISI PALING ATAS (TOP)
-      if (currentScrollY < threshold) {
-        // Jika Home: Hilang (biar gambar Hero bersih)
-        // Jika Lainnya: Muncul (biar menu terlihat)
-        setIsVisible(!isHomePage);
-      } 
-      // KONDISI 2: SUDAH SCROLL JAUH (Dynamic Logic)
-      else {
-        // Cek Arah Scroll
-        if (currentScrollY > lastScrollY.current) {
-           // Scroll ke BAWAH -> TAMPIL
-           setIsVisible(true);
-        } else {
-           // Scroll ke ATAS -> HILANG (Sesuai request Anda)
-           setIsVisible(false);
-        }
-      }
-
-      lastScrollY.current = currentScrollY;
+      setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
-    
-    // Panggil sekali di awal untuk memastikan posisi benar saat refresh
-    handleScroll();
-
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isHomePage, pathname]); // Re-run effect jika halaman berubah
+  }, []);
+
+  const navLinks = [
+    { name: 'Beranda', href: '/' },
+    { name: 'Fitur', href: '/#fitur' },
+    { name: 'Tema', href: '/#tema' },
+    { name: 'Harga', href: '/#harga' },
+    // { name: 'FAQ', href: '/faq' }, // Opsional
+  ];
 
   return (
-    <nav 
-      className={`fixed w-full z-50 top-0 start-0 border-b border-white/20 bg-white/90 backdrop-blur-md transition-transform duration-500 ease-in-out shadow-sm
-      ${isVisible ? 'translate-y-0' : '-translate-y-full'}`} 
-    >
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-4 py-3">
-        
-        {/* Logo Brand */}
-        <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <span className="self-center text-2xl font-bold whitespace-nowrap text-pink-600 font-serif">
-            Happy Wedding
-          </span>
-        </Link>
-
-        {/* Tombol Kanan */}
-        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-2">
-          <Link href="/login">
-            <button type="button" className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 text-center border border-gray-200 transition">
-              Login
-            </button>
+    <>
+      <nav 
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b
+          ${isScrolled 
+            ? 'bg-white/80 backdrop-blur-md border-stone-200/50 py-3 shadow-sm' 
+            : 'bg-transparent border-transparent py-5'
+          }
+        `}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          
+          {/* 1. LOGO */}
+          <Link href="/" className="relative z-50 group">
+             <span className={`font-serif text-2xl font-bold tracking-tight transition-colors duration-300 
+                ${isMobileMenuOpen ? 'text-gray-900' : (isScrolled || pathname !== '/') ? 'text-gray-900' : 'text-white md:text-gray-900'}
+             `}>
+               Happy<span className="text-pink-600">.</span>
+             </span>
           </Link>
-          <Link href="/register">
-            <button type="button" className="text-white bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-full text-sm px-5 py-2.5 text-center shadow-md transition hover:-translate-y-0.5">
-              Buat Undangan
-            </button>
-          </Link>
-        </div>
 
-        {/* Menu Tengah */}
-        <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
-          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent">
-            <li>
-              <Link href="/#beranda" className="block py-2 px-3 text-gray-900 rounded hover:text-pink-600 md:p-0 transition-colors">Beranda</Link>
-            </li>
-            <li>
-              <Link href="/features" className="block py-2 px-3 text-gray-900 rounded hover:text-pink-600 md:p-0 transition-colors">Fitur</Link>
-            </li>
-            <li>
-              <Link href="/themes" className="block py-2 px-3 text-gray-900 rounded hover:text-pink-600 md:p-0 transition-colors">Tema</Link>
-            </li>
-            <li>
-              <Link href="/#harga" className="block py-2 px-3 text-gray-900 rounded hover:text-pink-600 md:p-0 transition-colors">Harga</Link>
-            </li>
-          </ul>
+          {/* 2. DESKTOP MENU */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <Link 
+                key={link.name} 
+                href={link.href}
+                className={`text-sm font-medium transition-colors hover:text-pink-600
+                  ${(isScrolled || pathname !== '/') ? 'text-gray-600' : 'text-white/90 hover:text-white'}
+                `}
+              >
+                {link.name}
+              </Link>
+            ))}
+            
+            {/* CTA Button */}
+            <Link href="/login">
+                <button className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all shadow-lg hover:-translate-y-0.5
+                    ${(isScrolled || pathname !== '/') 
+                        ? 'bg-gray-900 text-white hover:bg-pink-600' 
+                        : 'bg-white text-gray-900 hover:bg-pink-50'
+                    }
+                `}>
+                    Login
+                </button>
+            </Link>
+          </div>
+
+          {/* 3. MOBILE HAMBURGER BUTTON */}
+          <button 
+            className="md:hidden relative z-50 p-2 focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <div className={`w-6 h-0.5 rounded-full transition-all duration-300 mb-1.5 
+                ${isMobileMenuOpen ? 'rotate-45 translate-y-2 bg-gray-900' : (isScrolled || pathname !== '/') ? 'bg-gray-900' : 'bg-white'}
+            `}></div>
+            <div className={`w-6 h-0.5 rounded-full transition-all duration-300 mb-1.5 
+                ${isMobileMenuOpen ? 'opacity-0' : (isScrolled || pathname !== '/') ? 'bg-gray-900' : 'bg-white'}
+            `}></div>
+            <div className={`w-6 h-0.5 rounded-full transition-all duration-300 
+                ${isMobileMenuOpen ? '-rotate-45 -translate-y-2 bg-gray-900' : (isScrolled || pathname !== '/') ? 'bg-gray-900' : 'bg-white'}
+            `}></div>
+          </button>
+
         </div>
+      </nav>
+
+      {/* 4. MOBILE MENU OVERLAY (FULLSCREEN) */}
+      <div className={`fixed inset-0 z-40 bg-stone-50/95 backdrop-blur-xl transition-transform duration-500 ease-in-out md:hidden flex flex-col justify-center items-center gap-8
+          ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}
+      `}>
+          {navLinks.map((link) => (
+            <Link 
+                key={link.name} 
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-2xl font-serif font-bold text-gray-800 hover:text-pink-600 transition-colors"
+            >
+                {link.name}
+            </Link>
+          ))}
+          
+          <div className="w-12 h-px bg-gray-200"></div>
+
+          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+              <button className="px-10 py-4 bg-gray-900 text-white rounded-full font-bold text-sm tracking-widest uppercase shadow-xl hover:bg-pink-600 transition-all">
+                  Masuk / Daftar
+              </button>
+          </Link>
       </div>
-    </nav>
+    </>
   );
 }

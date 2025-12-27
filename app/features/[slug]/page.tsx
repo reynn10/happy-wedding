@@ -57,97 +57,134 @@ const featuresData: Record<string, any> = {
   }
 };
 
-// --- KOMPONEN UTAMA HALAMAN ---
-// Ini yang sebelumnya hilang. Next.js butuh export default function ini.
+// --- KOMPONEN CTA (Agar bisa direuse) ---
+const CTACard = () => (
+  <div className="bg-gray-900 rounded-[2.5rem] p-8 text-center relative overflow-hidden shadow-2xl group border border-gray-800">
+    <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')]"></div>
+    <div className="absolute -top-24 -left-24 w-64 h-64 bg-pink-600 rounded-full blur-[100px] opacity-40 group-hover:opacity-60 transition-opacity"></div>
+    
+    <div className="relative z-10">
+        <h3 className="text-2xl font-serif font-bold text-white mb-3">Siap Menggunakan?</h3>
+        <p className="text-gray-400 text-xs mb-6 max-w-xs mx-auto leading-relaxed">Nikmati kemudahan fitur ini di pernikahan impian Anda.</p>
+        
+        <div className="flex flex-col gap-3">
+            <Link href="/register" className="w-full bg-white text-gray-900 px-6 py-3.5 rounded-full font-bold text-xs tracking-widest uppercase hover:bg-pink-50 transition shadow-lg flex items-center justify-center gap-3">
+                Coba Gratis Sekarang
+            </Link>
+            <Link href="/features" className="w-full bg-transparent border border-gray-600 text-white px-6 py-3.5 rounded-full font-bold text-xs tracking-widest uppercase hover:border-white transition flex items-center justify-center gap-2">
+                Lihat Fitur Lain
+            </Link>
+        </div>
+    </div>
+  </div>
+);
+
 export default async function FeatureDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  // 1. Ambil slug dari params (Async untuk Next.js terbaru)
   const { slug } = await params;
-  
-  // 2. Cari data di database lokal kita
   const data = featuresData[slug];
 
-  // 3. Jika slug tidak ada (misal /features/ngawur), tampilkan 404
   if (!data) {
     return notFound();
   }
 
-  // 4. Render Tampilan
   return (
-    <main className="min-h-screen bg-white font-sans">
+    <main className="min-h-screen bg-stone-50 font-sans text-gray-800 selection:bg-pink-100 selection:text-pink-600 overflow-x-hidden">
       <Navbar />
 
-      {/* --- HERO HEADER --- */}
-      <section className="pt-32 pb-20 px-6 bg-stone-50 text-center relative overflow-hidden">
-         <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-         <div className="max-w-4xl mx-auto relative z-10">
-            <p className="text-pink-600 font-bold tracking-widest uppercase text-sm mb-4">Fitur Unggulan</p>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 font-serif mb-6">{data.title}</h1>
-            <p className="text-gray-500 text-lg md:text-xl font-light max-w-2xl mx-auto">{data.subtitle}</p>
-         </div>
-      </section>
+      {/* Background Blobs (Soft Luxury) */}
+      <div className="fixed top-0 left-0 w-[800px] h-[800px] bg-pink-100/40 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0"></div>
+      <div className="fixed bottom-0 right-0 w-[800px] h-[800px] bg-purple-100/40 rounded-full blur-[120px] translate-x-1/2 translate-y-1/2 pointer-events-none z-0"></div>
 
-      {/* --- MAIN CONTENT --- */}
-      <section className="py-20 px-6">
-          <div className="max-w-7xl mx-auto">
-              
-              {/* Gambar Utama (Visual Mewah) */}
-              <div className="relative w-full h-[300px] md:h-[500px] rounded-[3rem] overflow-hidden shadow-2xl mb-20 group">
-                  <Image 
-                    src={data.image} 
-                    alt={data.title} 
-                    fill 
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-              </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-28">
+        
+        {/* Breadcrumb */}
+        <div className="mb-12">
+            <Link href="/#fitur" className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-gray-400 hover:text-pink-600 transition-colors uppercase group">
+                <span className="group-hover:-translate-x-1 transition-transform">←</span> Kembali ke Menu
+            </Link>
+        </div>
 
-              {/* Penjelasan & Grid Benefit */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                  
-                  {/* Kolom Kiri: Deskripsi Utama */}
-                  <div className="md:col-span-1">
-                      <h3 className="text-2xl font-serif font-bold text-gray-900 mb-4">Cara Kerja</h3>
-                      <p className="text-gray-600 leading-relaxed mb-8">
-                          {data.description}
-                      </p>
-                      <Link href="/login" className="inline-block bg-gray-900 text-white px-8 py-3 rounded-full font-bold hover:bg-pink-600 transition shadow-lg">
-                          Coba Sekarang
-                      </Link>
-                  </div>
+        {/* --- GRID UTAMA --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+            
+            {/* --- LEFT COLUMN: STICKY VISUAL & ACTION --- */}
+            <div className="lg:sticky lg:top-32 order-1 flex flex-col gap-8">
+                
+                {/* 1. Image Card */}
+                <div className="relative">
+                    <div className="absolute -top-10 -left-10 w-40 h-40 bg-linear-to-br from-pink-200 to-transparent rounded-full opacity-50 blur-2xl"></div>
+                    <div className="relative aspect-4/5 w-full rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white group">
+                        <Image 
+                            src={data.image} 
+                            alt={data.title} 
+                            fill 
+                            className="object-cover transition-transform duration-[1.5s] group-hover:scale-105"
+                            priority
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-80"></div>
+                        <div className="absolute bottom-10 left-8 right-8 text-white">
+                            <p className="text-xs font-bold tracking-[0.3em] uppercase mb-2 text-pink-200 opacity-90">Feature Highlight</p>
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-4">{data.title}</h1>
+                            <div className="w-20 h-1.5 bg-pink-500 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div className="absolute -bottom-8 -right-8 bg-white p-5 rounded-[2.5rem] shadow-xl border border-stone-100 animate-bounce-slow hidden md:block">
+                       <div className="w-14 h-14 bg-pink-50 rounded-3xl flex items-center justify-center text-pink-600">
+                          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                       </div>
+                    </div>
+                </div>
 
-                  {/* Kolom Kanan: Grid Benefit */}
-                  <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      {data.benefits.map((benefit: any, index: number) => (
-                          <div key={index} className="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition hover:border-pink-200 group">
-                              <div className="w-10 h-10 bg-pink-50 rounded-full flex items-center justify-center text-pink-600 mb-4 group-hover:bg-pink-600 group-hover:text-white transition-colors">
-                                  <span className="font-bold font-serif">{index + 1}</span>
-                              </div>
-                              <h4 className="text-lg font-bold text-gray-900 mb-2">{benefit.title}</h4>
-                              <p className="text-gray-500 text-sm leading-relaxed">{benefit.desc}</p>
-                          </div>
-                      ))}
-                  </div>
+                {/* 2. CTA Box (DESKTOP ONLY) */}
+                <div className="hidden lg:block">
+                   <CTACard />
+                </div>
 
-              </div>
-          </div>
-      </section>
+            </div>
 
-      {/* --- NAVIGATION FOOTER --- */}
-      <section className="py-20 bg-pink-600 text-center text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')]"></div>
-          <div className="relative z-10">
-              <h2 className="text-3xl font-serif font-bold mb-6">Mulai Gunakan Fitur Ini</h2>
-              <div className="flex justify-center gap-4">
-                  <Link href="/register" className="bg-white text-pink-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition shadow-xl">
-                      Buat Akun Gratis
-                  </Link>
-                  <Link href="/features" className="bg-transparent border border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white/10 transition">
-                      Kembali ke Menu
-                  </Link>
-              </div>
-          </div>
-      </section>
+            {/* --- RIGHT COLUMN: CONTENT DETAIL --- */}
+            <div className="pt-4 lg:pt-8 order-2">
+                
+                {/* Intro */}
+                <h2 className="text-3xl md:text-5xl font-serif text-gray-900 leading-tight mb-8">
+                    {data.subtitle}
+                </h2>
+                
+                <blockquote className="text-lg md:text-xl text-gray-500 leading-relaxed font-light mb-12 border-l-4 border-pink-200 pl-8 italic">
+                    "{data.description}"
+                </blockquote>
 
+                <div className="w-full h-px bg-stone-200 mb-12"></div>
+
+                {/* Benefits List (Editorial Numbering) */}
+                <div className="space-y-12">
+                    {data.benefits.map((item: any, idx: number) => (
+                        <div key={idx} className="group flex gap-6 md:gap-8 items-start">
+                            <span className="font-serif text-5xl md:text-6xl text-stone-200 font-bold group-hover:text-pink-200 transition-colors duration-500 -mt-2 leading-none select-none shrink-0">
+                                0{idx + 1}
+                            </span>
+                            <div className="pt-2">
+                                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-pink-600 transition-colors">
+                                    {item.title}
+                                </h3>
+                                <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+                                    {item.desc}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* 3. CTA Box (MOBILE ONLY) - Tampil di bawah konten */}
+                <div className="block lg:hidden mt-16">
+                   <CTACard />
+                </div>
+
+            </div>
+
+        </div>
+      </div>
+      
       <Footer />
     </main>
   );
